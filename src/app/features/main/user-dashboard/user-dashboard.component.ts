@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { KpiCardComponent } from './components/kpi-card/kpi-card.component';
+import { KpiCardComponent } from '../../../components/kpi-card/kpi-card.component';
 import { MonthlyTransactionsComponent } from './components/monthly-transactions/monthly-transactions.component';
 import { BalanceTrendGraphComponent } from './components/balance-trend-graph/balance-trend-graph.component';
 import { DashboardService } from './service/dashboard.service';

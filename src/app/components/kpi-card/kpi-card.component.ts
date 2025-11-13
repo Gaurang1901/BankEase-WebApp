@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { KpiCard } from '../../model/dashboard.types';
+import { KpiCard } from '../../features/main/user-dashboard/model/dashboard.types';
 import { CardModule } from 'primeng/card';
 
 @Component({
