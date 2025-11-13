@@ -1,0 +1,148 @@
+@import "tailwindcss";
+@plugin "tailwindcss-primeui";
+@custom-variant dark (&:where(.my-app-dark, .my-app-dark *));
+@import "primeicons/primeicons.css";
+
+@theme {
+  --color-primary: var(--primary-500);
+  --color-secondary: var(--secondary-500);
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-card-muted: var(--card-muted);
+  --color-card-elevated: var(--card-elevated);
+  --color-card-accent: var(--card-accent);
+  --color-card-contrast: var(--card-contrast);
+  --color-foreground: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-tertiary: var(--foreground-tertiary);
+}
+
+:root {
+  --background: #fafafa;
+
+  --card: #ffffff;
+  --card-muted: #bfd4f0;
+  --card-elevated: #9eb6d6;
+  --card-accent: #8ea7c9;
+  --card-contrast: #7d98bc;
+
+  --foreground: #000000;
+  --foreground-secondary: #4b5563;
+  --foreground-tertiary: #6b7280;
+
+  /* Primary */
+  --primary-50: #bfd4f0;
+  --primary-100: #9eb6d6;
+  --primary-200: #8ea7c9;
+  --primary-300: #7d98bc;
+  --primary-400: #5c79a1;
+  --primary-500: #3b5b87;
+  --primary-600: #1a3d6d;
+  --primary-700: #153157;
+  --primary-800: #102541;
+  --primary-900: #0a182c;
+
+  /* Secondary */
+  /* Secondary */
+  --secondary-50: #f9fafb;
+  --secondary-100: #f3f4f6;
+  --secondary-200: #e5e7eb;
+  --secondary-300: #d1d5db;
+  --secondary-400: #9ca3af;
+  --secondary-500: #6b7280;
+  --secondary-600: #4b5563;
+  --secondary-700: #374151;
+  --secondary-800: #1f2937;
+  --secondary-900: #111827;
+}
+
+.my-app-dark {
+  --background: #171616;
+
+  --card: #262626;
+  --card-muted: #0a182c;
+  --card-elevated: #102541;
+  --card-accent: #153157;
+  --card-contrast: #1a3d6d;
+
+  /* Primary */
+  --color-primary-50: #e8f0fb;
+  --color-primary-100: #d0e1f6;
+  --color-primary-200: #b9d2f1;
+  --color-primary-300: #a1c3ec;
+  --color-primary-400: #89b4e7;
+  --color-primary-500: #7296cc;
+  --color-primary-600: #5c79b1;
+  --color-primary-700: #465c96;
+  --color-primary-800: #30407b;
+  --color-primary-900: #1b2560;
+  --color-primary-1000: #121b4a;
+
+  /* Secondary */
+  --secondary-50: #f9fafb;
+  --secondary-100: #f3f4f6;
+  --secondary-200: #e5e7eb;
+  --secondary-300: #d1d5db;
+  --secondary-400: #9ca3af;
+  --secondary-500: #6b7280;
+  --secondary-600: #4b5563;
+  --secondary-700: #374151;
+  --secondary-800: #1f2937;
+  --secondary-900: #111827;
+
+  --foreground: #ffffff;
+  --foreground-secondary: #9ca3af;
+  --foreground-tertiary: #6b7280;
+}
+
+.p-datatable-resizable-column {
+  @apply bg-slate-200 dark:bg-slate-600 px-[6px] py-[4px];
+}
+
+:host ::ng-deep .p-datatable-wrapper {
+  border-top-left-radius: 3px !important;
+  border-top-right-radius: 3px !important;
+}
+:host ::ng-deep .p-datatable-table-container {
+  border-top-left-radius: 6px !important;
+  border-top-right-radius: 6px !important;
+}
+.p-datatable-scrollable > .p-datatable-table-container {
+  border-top-left-radius: 6px !important;
+  border-top-right-radius: 6px !important;
+}
+
+:host ::ng-deep .p-paginator {
+  border-bottom-left-radius: 3px !important;
+  border-bottom-right-radius: 3px !important;
+}
+
+.p-multiselect-display-chip .p-multiselect-label {
+  gap: 5px !important;
+}
+
+.p-button {
+  border-radius: 12px !important;
+}
+
+.p-inputtext {
+  border-radius: 12px !important;
+}
+
+.p-inputgroup .p-inputtext,
+.p-inputgroup .p-inputwrapper {
+  border-radius: inherit !important;
+}
+.p-datepicker-input {
+  border-radius: 12px 0px 0px 12px !important;
+}
+.p-datepicker-dropdown {
+  border-radius: 0px 12px 12px 0px !important;
+  background-color: transparent !important;
+}
+
+
+.p-password:has(.p-password-toggle-mask-icon) .p-password-clear-icon, 
+.p-password:has(.p-password-toggle-mask-icon) .p-password-input { 
+  width: 100% !important;
+}

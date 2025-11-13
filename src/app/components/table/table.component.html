@@ -1,0 +1,150 @@
+<div class="w-fullflex flex-col gap-4">
+  <div class="flex flex-row-reverse justify-between">
+    <p-button
+      *ngIf="showExportToExcel"
+      label="Export to Excel"
+      icon="pi pi-file-excel"
+      [disabled]="loading"
+      class="p-button-sm p-button-outlined p-button-primary"
+      (click)="onExport()"
+    ></p-button>
+  </div>
+  <p-table
+    #dataTable
+    ngSkipHydration
+    [columns]="columns"
+    [lazy]="true"
+    [value]="data"
+    (onLazyLoad)="loadData($event)"
+    [totalRecords]="totalItems"
+    [showFirstLastIcon]="true"
+    [paginator]="false"
+    [rows]="rowsForTable"
+    [scrollable]="true"
+    [loading]="loading"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [resizableColumns]="true"
+    class="!rounded-md"
+    styleClass="!border-[1.5px] !border-gray-200 !rounded-[8px] !p-datatable-gridlines"
+  >
+    <ng-template pTemplate="loadingbody">
+      <tr>
+        <td [attr.colspan]="columns.length" class="text-center py-8">
+          <div
+            class="bg-card-muted text-lg p-4 shadow-md rounded-md flex justify-center items-center"
+          >
+            <span class="font-semibold text-primary">Loading...</span>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr class="border-b border-input">
+        <th
+          style="border-right: 1px solid #d9dfdf; min-width: fit-content"
+          class="!border-r !border-[#D9DfDf]"
+          *ngFor="let col of columns"
+          [pSortableColumn]="col.sortable !== false ? col.field : undefined"
+          pResizableColumn
+        >
+          {{ col.header }}
+          <ng-container *ngIf="col.sortable">
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </ng-container>
+          <span *ngIf="col.filterable">
+            <p-columnFilter
+              [type]="
+                col.filterType === 'custom' ? 'text' : col.filterType || 'text'
+              "
+              [field]="col.field"
+              display="menu"
+              [showMatchModes]="false"
+            >
+              <ng-template pTemplate="filtericon">
+                <i class="pi pi-search" style="color: #a4c681"></i>
+              </ng-template>
+              <ng-container *ngIf="col.filterType === 'custom'">
+                <ng-template pTemplate="filter" let-filter>
+                  <ng-container
+                    *ngTemplateOutlet="
+                      col.customFilterTemplate ?? null;
+                      context: { $implicit: col, col: col, filter: filter }
+                    "
+                  ></ng-container>
+                </ng-template>
+              </ng-container>
+            </p-columnFilter>
+          </span>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData>
+      <tr class="border-b border-input h-8">
+        <td *ngFor="let col of columns; let i = index">
+          <ng-container *ngIf="col.cellTemplate; else noTemplate">
+            <ng-container
+              *ngTemplateOutlet="
+                col.cellTemplate;
+                context: { $implicit: rowData, row: rowData }
+              "
+            ></ng-container>
+          </ng-container>
+          <ng-template #noTemplate>
+            <ng-container *ngIf="col.cellRenderer; else defaultCell">
+              <button
+                type="button"
+                class="text-left w-full"
+                (click)="handleCellClick(col, rowData)"
+                [disabled]="!col.onClick"
+                style="background: transparent; border: 0; padding: 0"
+              >
+                <span [innerHTML]="renderCell(col, rowData)"></span>
+              </button>
+            </ng-container>
+            <ng-template #defaultCell>
+              <button
+                type="button"
+                class="text-left w-full"
+                (click)="handleCellClick(col, rowData)"
+                [disabled]="!col.onClick"
+                style="background: transparent; border: 0; padding: 0"
+              >
+                {{ rowData[col.field] }}
+              </button>
+            </ng-template>
+          </ng-template>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td [attr.colspan]="columns.length" class="text-center py-4">
+          No data found
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <div class="flex justify-between items-center mt-2 px-2">
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+    <div class="flex gap-2">
+      <button
+        class="px-3 py-1 border rounded-md disabled:opacity-50"
+        (click)="goToPreviousPage()"
+        [disabled]="currentPage === 1"
+      >
+        Previous
+      </button>
+
+      <button
+        class="px-3 py-1 border rounded-md disabled:opacity-50"
+        (click)="goToNextPage()"
+        [disabled]="currentPage === totalPages"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>

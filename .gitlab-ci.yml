@@ -1,0 +1,36 @@
+stages:
+  - build
+  - deploy
+
+build-angular-app:
+  image: node:22-alpine
+  stage: build
+  tags:
+    - gitlab-runner-2
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-node
+    paths:
+      - node_modules/
+  script:
+    - npm i
+    - npm install -g @angular/cli
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hour
+  only:
+    - Dev
+  when: manual
+
+deploy:
+  stage: deploy
+  image: node:18
+  tags:
+    - gitlab-runner-2
+  script:
+    - npm install -g @azure/static-web-apps-cli
+    - swa deploy dist/my-angular-app/browser --deployment-token $AZURE_STATIC_WEB_APPS_TOKEN 
+  only:
+    - Dev
+  when: manual

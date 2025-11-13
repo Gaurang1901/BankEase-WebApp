@@ -1,0 +1,18 @@
+.p-datatable-thead > tr > th {
+  padding: 6px !important;
+  background: var(--color-secondary) !important;
+}
+
+.p-datatable-scrollable > .p-datatable-table-container {
+    border-radius: 8px !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-mask {
+  display: none !important;
+  background: none !important;
+}
+
+/* Hide PrimeNG table default loader spinner */
+:host ::ng-deep .p-datatable .p-datatable-loading-icon {
+  display: none !important;
+}

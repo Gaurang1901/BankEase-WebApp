@@ -1,0 +1,261 @@
+<div class="min-h-screen flex">
+  <!-- Left Side: Login Form -->
+  <div class="flex w-full md:w-1/2 bg-card dark:bg-slate-900 items-center px-8">
+    <div class="w-full flex flex-col p-2 justify-between h-screen max-w-md">
+      <!-- Project Title -->
+      <div>
+        <div class="flex items-center justify-start mb-8">
+          <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-100">
+            BankEase
+          </h1>
+        </div>
+      </div>
+
+      <!-- Sign In Section -->
+      <div>
+        <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">
+          Sign in
+        </h2>
+        <p class="text-slate-600 dark:text-slate-400 mb-6">
+          Please choose your login method to continue.
+        </p>
+
+        <!-- Tabbed Login Forms -->
+        <p-tabView [(activeIndex)]="activeIndex">
+          <!-- Account Login -->
+          <p-tabPanel header="Account Login">
+            <form
+              [formGroup]="accountLoginForm"
+              (ngSubmit)="onSubmit('account')"
+              class="flex flex-col gap-6"
+            >
+              <!-- Account Number Field -->
+              <div>
+                <label
+                  for="accountNumber"
+                  class="block text-sm font-medium text-foreground mb-1"
+                >
+                  Account Number
+                </label>
+                <input
+                  pInputText
+                  id="accountNumber"
+                  formControlName="accountNumber"
+                  type="text"
+                  class="w-full"
+                  placeholder="Enter your account number..."
+                />
+              </div>
+
+              <!-- Password Field -->
+              <div>
+                <label
+                  for="password"
+                  class="block text-sm font-medium text-foreground mb-1"
+                >
+                  Password
+                </label>
+                <p-password
+                  id="password"
+                  formControlName="password"
+                  class="w-full"
+                  styleClass="w-full"
+                  [toggleMask]="true"
+                />
+              </div>
+
+              <!-- Keep me signed in -->
+              <div class="flex items-center gap-2">
+                <p-checkbox
+                  inputId="keepSignedInAccount"
+                  binary="true"
+                  formControlName="rememberMe"
+                ></p-checkbox>
+                <label for="keepSignedInAccount">Keep me signed in</label>
+              </div>
+
+              <!-- Sign In Button -->
+              <p-button
+                label="Sign in"
+                type="submit"
+                styleClass="p-button-primary w-full"
+                [loading]="store.isLoading()"
+                [disabled]="accountLoginForm.invalid || store.isLoading()"
+              ></p-button>
+            </form>
+          </p-tabPanel>
+
+          <!-- OTP Login -->
+          <p-tabPanel header="OTP Login">
+            <form
+              [formGroup]="otpLoginForm"
+              (ngSubmit)="onSubmit('otp')"
+              class="flex flex-col gap-6"
+            >
+              <!-- Account Number Field -->
+              <div>
+                <label
+                  for="otpAccountNumber"
+                  class="block text-sm font-medium text-foreground mb-1"
+                >
+                  Account Number
+                </label>
+                <input
+                  pInputText
+                  id="otpAccountNumber"
+                  formControlName="accountNumber"
+                  type="text"
+                  class="w-full"
+                  placeholder="Enter your account number..."
+                  [disabled]="showOTPInput"
+                />
+              </div>
+
+              <!-- OTP Field -->
+              <div *ngIf="showOTPInput">
+                <label
+                  for="otp"
+                  class="block text-sm font-medium text-foreground mb-1"
+                >
+                  Enter OTP
+                </label>
+                <input
+                  pInputText
+                  id="otp"
+                  formControlName="otp"
+                  type="text"
+                  class="w-full"
+                  placeholder="Enter 6-digit OTP"
+                  maxlength="6"
+                />
+                <button
+                  type="button"
+                  class="text-blue-600 text-sm mt-2 hover:underline"
+                  (click)="resendOTP()"
+                >
+                  Resend OTP
+                </button>
+              </div>
+
+              <!-- Submit Button -->
+              <p-button
+                [label]="otpSent ? 'Verify OTP' : 'Send OTP'"
+                type="submit"
+                styleClass="p-button-primary w-full"
+                [loading]="store.isLoading()"
+                [disabled]="
+                  (otpSent && !otpLoginForm.get('otp')?.valid) ||
+                  (!otpSent && !otpLoginForm.get('accountNumber')?.valid) ||
+                  store.isLoading()
+                "
+              ></p-button>
+            </form>
+          </p-tabPanel>
+
+          <!-- Admin Login -->
+          <p-tabPanel header="Admin Login">
+            <form
+              [formGroup]="adminLoginForm"
+              (ngSubmit)="onSubmit('admin')"
+              class="flex flex-col gap-6"
+            >
+              <!-- Email Field -->
+              <div>
+                <label
+                  for="adminEmail"
+                  class="block text-sm font-medium text-foreground mb-1"
+                >
+                  Email Address
+                </label>
+                <input
+                  pInputText
+                  id="adminEmail"
+                  formControlName="email"
+                  type="email"
+                  class="w-full"
+                  placeholder="Enter your email address..."
+                />
+              </div>
+
+              <!-- Password Field -->
+              <div>
+                <label
+                  for="adminPassword"
+                  class="block text-sm font-medium text-foreground mb-1"
+                >
+                  Password
+                </label>
+                <p-password
+                  id="adminPassword"
+                  formControlName="password"
+                  class="w-full"
+                  styleClass="w-full"
+                  [toggleMask]="true"
+                />
+              </div>
+
+              <!-- Keep me signed in -->
+              <div class="flex items-center gap-2">
+                <p-checkbox
+                  inputId="keepSignedInAdmin"
+                  binary="true"
+                  formControlName="rememberMe"
+                ></p-checkbox>
+                <label for="keepSignedInAdmin">Keep me signed in</label>
+              </div>
+
+              <!-- Sign In Button -->
+              <p-button
+                label="Sign in"
+                type="submit"
+                styleClass="p-button-primary w-full"
+                [loading]="store.isLoading()"
+                [disabled]="adminLoginForm.invalid || store.isLoading()"
+              ></p-button>
+            </form>
+          </p-tabPanel>
+        </p-tabView>
+
+        <!-- API Error -->
+        <p-message
+          *ngIf="store.error()"
+          severity="error"
+          [text]="store.error()!"
+          styleClass="w-full mt-4"
+        ></p-message>
+
+        <!-- Forgot Password Link -->
+        <div class="mt-4 text-center">
+          <a
+            routerLink="/auth/forget-password"
+            class="text-blue-600 hover:underline"
+            >Forgot Password?</a
+          >
+        </div>
+        <div class="mt-4 text-center">
+          <a href="/signup" class="text-blue-600 hover:underline"
+            >Don't have an account, Sign up?</a
+          >
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="mt-10 text-xs text-slate-500 dark:text-slate-400 flex justify-between"
+      >
+        <span>Copyright © 2025 BankEase</span>
+        <div class="flex gap-3">
+          <a href="#" class="hover:underline">Terms of Service</a>
+          <a href="#" class="hover:underline">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side: Background Image -->
+  <div class="hidden p-2 md:flex w-1/2">
+    <div
+      class="h-full bg-card-muted border w-full border-foreground-tertiary rounded-xl"
+    ></div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div
+  class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#121212] text-black dark:text-white"
+>
+  <div class="flex flex-col sm:text-sm md:text-base">
+    <span *ngIf="title$ | async as title" class="font-bold">{{ title }}</span>
+    <span
+      *ngIf="description$ | async as description"
+      class="text-foreground-secondary text-sm"
+    >
+      {{ description }}
+    </span>
+    <ng-container *ngIf="breadcrumbItems$ | async as breadcrumbItems">
+      <p-breadcrumb
+        *ngIf="breadcrumbItems.length > 0"
+        styleClass="max-w-full p-0 text-sm text-muted-foreground bg-white dark:bg-[#121212]"
+        [model]="breadcrumbItems"
+        [home]="(home$ | async) || undefined"
+      >
+        <ng-template class="bg-background" pTemplate="item" let-item>
+          <ng-container *ngIf="item.routerLink; else elseBlock">
+            <a
+              [routerLink]="item.routerLink"
+              class="text-foreground flex flex-row items-center gap-1 font-semibold"
+            >
+              <span
+                [ngClass]="[item.icon ? item.icon : '', 'text-color']"
+              ></span>
+              <span [class]="'' + item.styleClass || ''">{{ item.label }}</span>
+            </a>
+          </ng-container>
+          <ng-template #elseBlock>
+            <a [routerLink]="item.url" (click)="handleClick(item)">
+              <span [class]="'' + item.styleClass || ''">{{
+                item.label
+              }}</span>
+            </a>
+          </ng-template>
+        </ng-template>
+      </p-breadcrumb>
+    </ng-container>
+  </div>
+  <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4">
+      <p-button
+        [rounded]="true"
+        [text]="true"
+        severity="contrast"
+        (onClick)="themeStore.toggleTheme()"
+      >
+        <i [class]="themeStore.isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"></i>
+      </p-button>
+    </div>
+    <div>
+      <p-button label="Logout" severity="secondary" (onClick)="logout()">
+        <i class="pi pi-sign-out"></i>
+      </p-button>
+    </div>
+  </div>
+</div>

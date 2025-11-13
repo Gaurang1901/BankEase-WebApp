@@ -1,0 +1,74 @@
+<div class="scale-down-calendar w-fit">
+  <p-datePicker
+    selectionMode="range"
+    [showIcon]="true"
+    [readonlyInput]="true"
+    dateFormat="dd/mm/yy"
+    [(ngModel)]="rangeDatesInput"
+    (ngModelChange)="onDateChange()"
+  >
+    <ng-template pTemplate="header">
+      <div class="date-range-display flex items-center gap-1 justify-center">
+        <input
+          pInputText
+          [value]="
+            rangeDatesInput && rangeDatesInput[0]
+              ? (rangeDatesInput[0] | date : 'dd MMM yyyy')
+              : ''"
+          class="text-center font-semibold"
+          placeholder="From Date"
+          readonly
+        />
+        <i class="pi pi-arrow-right"></i>
+        <input
+          pInputText
+          [value]="
+            rangeDatesInput && rangeDatesInput[1]
+              ? (rangeDatesInput[1] | date : 'dd MMM yyyy')
+              : ''
+          "
+          class="text-center font-semibold"
+          placeholder="To Date"
+          readonly
+        />
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <div class="flex flex-col gap-2">
+        <div class="flex justify-around gap-2">
+          <button
+            pButton
+            type="button"
+            label="3 Months"
+            (click)="setRange(3)"
+            class="p-button-text"
+          ></button>
+          <button
+            pButton
+            type="button"
+            label="6 Months"
+            (click)="setRange(6)"
+            class="p-button-text"
+          ></button>
+          <button
+            pButton
+            type="button"
+            label="12 Months"
+            (click)="setRange(12)"
+            class="p-button-text"
+          ></button>
+        </div>
+        <div class="flex justify-end mt-2">
+          <button
+            pButton
+            type="button"
+            label="Clear"
+            (click)="clearDateRange()"
+            class="max-w-52"
+          ></button>
+        </div>
+      </div>
+    </ng-template>
+  </p-datePicker>
+</div>

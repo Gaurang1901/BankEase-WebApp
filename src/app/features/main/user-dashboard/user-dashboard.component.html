@@ -1,0 +1,25 @@
+<div class="flex flex-col p-4">
+  <div class=" ">
+    <!-- Header -->
+
+    <!-- KPI Cards Section -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div *ngFor="let kpi of kpiCards">
+        <app-kpi-card [data]="kpi"></app-kpi-card>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="col-span-1">
+        <app-monthly-transactions></app-monthly-transactions>
+      </div>
+      <div class="col-span-1">
+        <app-balance-trend-graph></app-balance-trend-graph>
+      </div>
+    </div>
+  </div>
+  <div class="mt-6">
+    <app-recent-transaction-table></app-recent-transaction-table>
+  </div>
+</div>

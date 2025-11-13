@@ -1,0 +1,14 @@
+<app-sidebar
+  [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+  (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)"
+></app-sidebar>
+
+
+<main class="body flex flex-col h-screen" [ngClass]="screenClass()">
+  <app-header ></app-header>
+
+  <!-- This wrapper will now fill the remaining space -->
+  <div class="flex-1 p-2 overflow-auto bg-background">
+    <router-outlet></router-outlet>
+  </div>
+</main>

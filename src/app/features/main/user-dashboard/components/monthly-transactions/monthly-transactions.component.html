@@ -1,0 +1,16 @@
+<p-card
+  styleClass="h-full shadow-md border rounded-xl p-4 border-secondary-200"
+>
+  <ng-template #header>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold text-foreground">
+        Monthly Transactions
+      </h2>
+      <i class="pi pi-chart-bar text-2xl text-foreground"></i>
+    </div>
+  </ng-template>
+  <app-reusable-graph
+    [chartOption]="chartOption"
+    style="height: 300px; width: 100%"
+  ></app-reusable-graph>
+</p-card>

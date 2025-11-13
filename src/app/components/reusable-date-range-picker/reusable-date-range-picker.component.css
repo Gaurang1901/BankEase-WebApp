@@ -1,0 +1,3 @@
+:host ::ng-deep .p-datepicker-panel {
+  scale: 0.8 !important;
+}

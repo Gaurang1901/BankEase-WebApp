@@ -1,0 +1,18 @@
+<p-card
+  styleClass="shadow-md border rounded-xl border-secondary-200 hover:shadow-lg transition-shadow duration-300 ease-in-out p-8"
+>
+  <div class="flex items-center justify-between">
+    <div class="flex flex-col">
+      <span class="text-sm font-medium text-foreground">{{ data.title }}</span>
+      <span class="text-2xl font-bold text-foreground-secondary">{{ data.value }}</span>
+    </div>
+    <div
+      [class]="
+        'flex items-center justify-center w-12 h-12 rounded-full ' +
+        data.colorClass
+      "
+    >
+      <i [class]="'pi ' + data.icon + ' text-xl text-foreground'"></i>
+    </div>
+  </div>
+</p-card>

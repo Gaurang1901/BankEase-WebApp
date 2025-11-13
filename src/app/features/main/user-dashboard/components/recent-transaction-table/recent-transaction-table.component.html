@@ -1,0 +1,17 @@
+<p-card
+  styleClass="h-full shadow-md border rounded-xl p-4 border-secondary-200"
+>
+  <ng-template #header>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold text-foreground">Balance Trend</h2>
+      <i class="pi pi-line-chart text-2xl text-foreground"></i>
+    </div>
+  </ng-template>
+  <app-table
+    [columns]="columns"
+    [getDataFunc]="getRecentTransactions"
+    [paginationPageSize]="paging.size ?? 10"
+    [componentInstance]="this"
+  >
+  </app-table>
+</p-card>
