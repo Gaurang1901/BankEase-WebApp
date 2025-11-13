@@ -24,23 +24,13 @@ export class UsersAddedOverTimeComponent {
 
   private createChartOptions(data: UserGrowthData[]): EChartsOption {
     return {
-      title: {
-        text: 'Users Added Over Time',
-        subtext: 'Monthly user registration trends',
-        left: 'start',
-        textStyle: { color: '#E5E7EB' },
-        subtextStyle: { color: '#9CA3AF' },
-      },
       tooltip: { trigger: 'axis' },
       xAxis: {
         type: 'category',
         data: data.map((item) => item.month),
-        axisLabel: { color: '#9CA3AF' },
       },
       yAxis: {
         type: 'value',
-        axisLabel: { color: '#9CA3AF' },
-        splitLine: { lineStyle: { color: '#4B5563' } },
       },
       series: [
         {
@@ -50,8 +40,6 @@ export class UsersAddedOverTimeComponent {
           symbol: 'circle',
           symbolSize: 8,
           data: data.map((item) => item.newUsers),
-          lineStyle: { color: '#FFFFFF' },
-          itemStyle: { color: '#FFFFFF' },
         },
       ],
       grid: {

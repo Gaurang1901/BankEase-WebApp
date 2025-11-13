@@ -29,18 +29,10 @@ export class TotalRevenueGraphComponent {
 
   private createChartOptions(data: TotalRevenueData[]): EChartsOption {
     return {
-      title: {
-        text: 'Total Revenue Per Month',
-        subtext: 'Monthly revenue performance',
-        left: 'start',
-        textStyle: { color: '#E5E7EB' },
-        subtextStyle: { color: '#9CA3AF' },
-      },
       tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
       xAxis: {
         type: 'category',
         data: data.map((item) => item.periodLabel),
-        axisLabel: { color: '#9CA3AF' },
       },
       yAxis: {
         type: 'value',
@@ -56,10 +48,6 @@ export class TotalRevenueGraphComponent {
           type: 'bar',
           barWidth: '60%',
           data: data.map((item) => item.revenue),
-          itemStyle: {
-            color: '#374151', // gray-700
-            borderRadius: [4, 4, 0, 0],
-          },
         },
       ],
       grid: {
