@@ -5,6 +5,7 @@ import { KpiCard } from '../../main/user-dashboard/model/dashboard.types';
 import { KpiCardComponent } from '../../../components/kpi-card/kpi-card.component';
 import { UsersAddedOverTimeComponent } from './components/users-added-over-time/users-added-over-time.component';
 import { TotalRevenueGraphComponent } from './components/total-revenue-graph/total-revenue-graph.component';
+import { AllRecentTransactionTableComponent } from './components/all-recent-transaction-table/all-recent-transaction-table.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -13,6 +14,7 @@ import { TotalRevenueGraphComponent } from './components/total-revenue-graph/tot
     UsersAddedOverTimeComponent,
     TotalRevenueGraphComponent,
     CommonModule,
+    AllRecentTransactionTableComponent,
   ],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.css',

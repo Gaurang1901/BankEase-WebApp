@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router, UrlTree } from '@angular/router';
+import { CanActivateChildFn, Router, UrlTree } from '@angular/router';
 import { AuthStore } from '../store/auth.store';
 import { AuthService } from '../services/auth.service';
 
-export const RoleGuard: CanActivateFn = (route, state): boolean | UrlTree => {
+export const RoleGuard: CanActivateChildFn = (route, state): boolean | UrlTree => {
   const authStore = inject(AuthStore);
   const authService = inject(AuthService);
   const router = inject(Router);
@@ -27,14 +27,13 @@ export const RoleGuard: CanActivateFn = (route, state): boolean | UrlTree => {
   const roles = (user?.roles ?? '') as unknown as string;
 
   if (url.startsWith('/user')) {
-    if (!roles.includes('user')) {
-      // not authorized
+    if (!roles.includes('ROLE_USER')) {
       return router.parseUrl('/login');
     }
   }
 
   if (url.startsWith('/admin')) {
-    if (roles.includes('user')) {
+    if (roles.includes('ROLE_USER')) {
       return router.parseUrl('/login');
     }
   }

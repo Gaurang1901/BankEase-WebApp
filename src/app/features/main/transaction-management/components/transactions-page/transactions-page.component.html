@@ -1,0 +1,97 @@
+<!-- For displaying success/error messages -->
+
+<div class="p-4 sm:p-6 lg:p-8">
+  <!-- Header -->
+  <!-- <header class="mb-8">
+    <h1 class="text-3xl font-bold text-foreground">Transactions</h1>
+    <p class="text-secondary-500 mt-1">
+      Manage your deposits, withdrawals, and transfers
+    </p>
+  </header> -->
+
+  <!-- Action Cards -->
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <!-- Deposit Card -->
+    <div
+      (click)="openTransactionDialog('Deposit')"
+      class="bg-card border border-secondary rounded-lg p-6 flex flex-col items-center text-center cursor-pointer hover:bg-gray-700/50 transition-colors duration-300"
+    >
+      <div
+        class="w-16 h-16 flex items-center justify-center bg-green-900/50 rounded-full mb-4"
+      >
+        <i class="pi pi-arrow-down text-2xl text-green-400"></i>
+      </div>
+      <h3 class="text-xl font-semibold text-foreground">Deposit</h3>
+      <p class="text-secondary-500">Add money to your account</p>
+    </div>
+
+    <!-- Withdraw Card -->
+    <div
+      (click)="openTransactionDialog('Withdraw')"
+      class="bg-card border border-secondary rounded-lg p-6 flex flex-col items-center text-center cursor-pointer hover:bg-gray-700/50 transition-colors duration-300"
+    >
+      <div
+        class="w-16 h-16 flex items-center justify-center bg-red-900/50 rounded-full mb-4"
+      >
+        <i class="pi pi-arrow-up text-2xl text-red-400"></i>
+      </div>
+      <h3 class="text-xl font-semibold text-foreground">Withdraw</h3>
+      <p class="text-secondary-500">Withdraw money from account</p>
+    </div>
+
+    <!-- Transfer Card -->
+    <div
+      (click)="openTransactionDialog('Transfer')"
+      class="bg-card border border-secondary rounded-lg p-6 flex flex-col items-center text-center cursor-pointer hover:bg-gray-700/50 transition-colors duration-300"
+    >
+      <div
+        class="w-16 h-16 flex items-center justify-center bg-blue-900/50 rounded-full mb-4"
+      >
+        <i class="pi pi-arrows-h text-2xl text-blue-400"></i>
+      </div>
+      <h3 class="text-xl font-semibold text-foreground">Transfer</h3>
+      <p class="text-secondary-500">Send money to another account</p>
+    </div>
+  </section>
+
+  <!-- Summary Cards -->
+  <section
+    *ngIf="summary$ | async as summary"
+    class="grid grid-cols-1 md:grid-cols-3 gap-6"
+  >
+    <div class="bg-card border border-secondary rounded-lg p-6">
+      <p class="text-secondary-500 mb-2">Total Deposits</p>
+      <p class="text-3xl font-bold text-green-400">
+        {{ summary.totalDeposits | currency : "USD" }}
+      </p>
+    </div>
+    <div class="bg-card border border-secondary rounded-lg p-6">
+      <p class="text-secondary-500 mb-2">Total Withdrawals</p>
+      <p class="text-3xl font-bold text-red-400">
+        {{ summary.totalWithdrawals | currency : "USD" }}
+      </p>
+    </div>
+    <div class="bg-card border border-secondary rounded-lg p-6">
+      <p class="text-secondary-500 mb-2">Total Transfers</p>
+      <p class="text-3xl font-bold text-blue-400">
+        {{ summary.totalTransfers | currency : "USD" }}
+      </p>
+    </div>
+  </section>
+
+  <div class="my-4 p-2 rounded-xl border border-secondary-200 flex flex-col gap-2">
+    <span>
+      <p class="text-secondary-500 mb-2">Transactions List </p>
+    </span>
+    <app-transaction-table></app-transaction-table>
+  </div>
+</div>
+
+<!-- Reusable Transaction Dialog -->
+<app-transaction-dialog
+  *ngIf="isDialogVisible"
+  [(visible)]="isDialogVisible"
+  [type]="currentTransactionType"
+  (formSubmit)="handleTransactionSubmit($event)"
+>
+</app-transaction-dialog>

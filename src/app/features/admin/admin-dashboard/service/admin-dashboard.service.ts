@@ -17,19 +17,12 @@ export class AdminDashboardService {
   private http = inject(ApiService);
   private readonly API_BASE_URL = '/api/dashboard';
 
-  /**
-   * Fetches the Key Performance Indicators.
-   */
   getKpi(): Observable<AdminKpiData> {
     return this.http
       .get(`${this.API_BASE_URL}/kpi`)
       .pipe(map((response: any) => response.data));
   }
 
-  /**
-   * Fetches user growth data for a given year.
-   * @param year The year to fetch data for.
-   */
   getUserGrowth(year: number): Observable<UserGrowthData[]> {
     const params = new HttpParams().set('year', year.toString());
     return this.http
@@ -39,14 +32,14 @@ export class AdminDashboardService {
       .pipe(map((response: any) => response.data));
   }
 
-  /**
-   * Fetches total revenue data for a given period type.
-   * @param type The revenue period type (e.g., YEARLY, MONTHLY).
-   */
   getTotalRevenue(type: RevenuePeriodType): Observable<TotalRevenueData[]> {
     const params = new HttpParams().set('type', type);
     return this.http
       .get(`${this.API_BASE_URL}/total-revenue`, { params })
       .pipe(map((response: any) => response.data));
+  }
+
+  getRecentTransactionsBymonth(month: string): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/transactions-by-month/${month}`);
   }
 }

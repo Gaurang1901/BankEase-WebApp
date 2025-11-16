@@ -3,8 +3,15 @@
 >
   <ng-template #header>
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-semibold text-foreground"> Recent Transactions</h2>
-      <i class="pi pi-line-chart text-2xl text-foreground"></i>
+      <h2 class="text-xl font-semibold text-foreground">Recent Transactions</h2>
+      <p-datePicker
+        [(ngModel)]="selectedMonth"
+        view="month"
+        dateFormat="MM"
+        placeholder="Select Month"
+        size="small"
+        [showIcon]="true"
+      ></p-datePicker>
     </div>
   </ng-template>
   <app-table

@@ -52,12 +52,7 @@ export const AuthStore = signalStore(
                     summary: 'Success',
                     detail: 'Login Successful',
                   });
-                  const user: User = {
-                    id: '1',
-                    name: 'Dummy User',
-                    email: 'dummy@example.com',
-                    roles: 'ROLE_USER',
-                  };
+                  const user: User = jwtDecode(data.token);
 
                   router.navigateByUrl('/');
 

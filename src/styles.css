@@ -6,6 +6,26 @@
 @theme {
   --color-primary: var(--primary-500);
   --color-secondary: var(--secondary-500);
+  --color-primary-50: #bfd4f0;
+  --color-primary-100: #9eb6d6;
+  --color-primary-200: #8ea7c9;
+  --color-primary-300: #7d98bc;
+  --color-primary-400: #5c79a1;
+  --color-primary-500: #3b5b87;
+  --color-primary-600: #1a3d6d;
+  --color-primary-700: #153157;
+  --color-primary-800: #102541;
+  --color-primary-900: #0a182c;
+  --color-secondary-50: #f9fafb;
+  --color-secondary-100: #f3f4f6;
+  --color-secondary-200: #e5e7eb;
+  --color-secondary-300: #d1d5db;
+  --color-secondary-400: #9ca3af;
+  --color-secondary-500: #6b7280;
+  --color-secondary-600: #4b5563;
+  --color-secondary-700: #374151;
+  --color-secondary-800: #1f2937;
+  --color-secondary-900: #111827;
   --color-background: var(--background);
   --color-card: var(--card);
   --color-card-muted: var(--card-muted);
@@ -18,7 +38,7 @@
 }
 
 :root {
-  --background: #fafafa;
+  --background: #Dee4e7;
 
   --card: #ffffff;
   --card-muted: #bfd4f0;
@@ -141,8 +161,7 @@
   background-color: transparent !important;
 }
 
-
-.p-password:has(.p-password-toggle-mask-icon) .p-password-clear-icon, 
-.p-password:has(.p-password-toggle-mask-icon) .p-password-input { 
+.p-password:has(.p-password-toggle-mask-icon) .p-password-clear-icon,
+.p-password:has(.p-password-toggle-mask-icon) .p-password-input {
   width: 100% !important;
 }

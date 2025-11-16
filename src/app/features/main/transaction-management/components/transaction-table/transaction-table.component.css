@@ -1,0 +1,20 @@
+.transaction-table-container {
+  width: 100%;
+}
+
+.tx-type-filter {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.tx-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+}
+
+.tx-option input[type='radio'] {
+  transform: scale(1);
+}

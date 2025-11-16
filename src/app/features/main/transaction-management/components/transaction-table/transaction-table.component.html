@@ -1,0 +1,51 @@
+<div class="transaction-table-container">
+  <app-table
+    [columns]="columns"
+    [getDataFunc]="getData"
+    [paginationPageSize]="paginationPageSize"
+    [totalItems]="totalItems"
+    [componentInstance]="this"
+  ></app-table>
+
+  <!-- custom filter template for Transaction Type -->
+  <ng-template #transactionTypeFilter>
+    <div class="tx-type-filter">
+      <label class="tx-option">
+        <input
+          type="radio"
+          name="txType"
+          [checked]="selectedTransactionType === 'ALL'"
+          (change)="onFilterChange('ALL')"
+        />
+        All
+      </label>
+      <label class="tx-option">
+        <input
+          type="radio"
+          name="txType"
+          [checked]="selectedTransactionType === 'WITHDRAW'"
+          (change)="onFilterChange('WITHDRAW')"
+        />
+        Withdraw
+      </label>
+      <label class="tx-option">
+        <input
+          type="radio"
+          name="txType"
+          [checked]="selectedTransactionType === 'DEPOSIT'"
+          (change)="onFilterChange('DEPOSIT')"
+        />
+        Deposit
+      </label>
+      <label class="tx-option">
+        <input
+          type="radio"
+          name="txType"
+          [checked]="selectedTransactionType === 'TRANSFER'"
+          (change)="onFilterChange('TRANSFER')"
+        />
+        Transfer
+      </label>
+    </div>
+  </ng-template>
+</div>

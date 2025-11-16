@@ -1,0 +1,110 @@
+<div class="p-4 sm:p-6 lg:p-8 min-h-screen">
+  <ng-container *ngIf="account$ | async as account">
+    <!-- Header -->
+    <header
+      class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6"
+    >
+      <div>
+        <h1 class="text-3xl font-bold text-foreground">Account Overview</h1>
+        <p class="text-secondary mt-1">
+          Complete details and information about your account
+        </p>
+      </div>
+      <div class="flex items-center space-x-2 mt-4 sm:mt-0">
+        <p-button
+          label="Edit Account"
+          icon="pi pi-pencil"
+          size="small"
+          outlined="true"
+          styleClass="!border-2 !border-secondary-400"
+        ></p-button>
+        <p-button
+          label="Close Account"
+          icon="pi pi-times"
+          severity="danger"
+          size="small"
+          (click)="showCloseDialog()"
+        ></p-button>
+      </div>
+    </header>
+    <!-- Account Summary Card -->
+    <div
+      class="bg-gradient-to-r from-blue-600 to-teal-500 rounded-xl p-8 text-foreground shadow-2xl mb-8 relative"
+    >
+      <div class="flex items-center mb-6">
+        <div class="bg-white/20 p-3 rounded-lg mr-4">
+          <i class="pi pi-wallet text-2xl"></i>
+        </div>
+        <div>
+          <p class="font-light">{{ account.summary.accountType }}</p>
+          <h2 class="text-xl font-semibold">
+            {{ account.summary.accountName }}
+          </h2>
+        </div>
+      </div>
+      <div>
+        <p class="text-sm text-secondary-400">Available Balance</p>
+        <p class="text-4xl font-bold tracking-tight">
+          {{
+            account.summary.availableBalance
+              | currency : account.summary.currency : "symbol" : "1.2-2"
+          }}
+        </p>
+      </div>
+      <div class="flex justify-between items-end mt-6">
+        <div>
+          <p class="text-xs text-secondary-400">Account Number</p>
+          <p class="font-mono text-sm">{{ account.summary.accountNumber }}</p>
+        </div>
+        <div class="text-right">
+          <p class="text-xs text-secondary-400">Account Holder</p>
+          <p class="text-sm font-semibold">
+            {{ account.summary.accountHolder }}
+          </p>
+        </div>
+      </div>
+      <p-tag
+        [value]="account.summary.status"
+        severity="success"
+        styleClass="absolute top-4 right-4 capitalize"
+      ></p-tag>
+    </div>
+
+    <!-- Details Grid -->
+    <main class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Left Column -->
+      <div class="flex flex-col gap-8">
+        <app-detail-list
+          [title]="'Account Details'"
+          subtitle="Basic account information"
+          icon="pi pi-file"
+          [items]="(accountDetailsItems$ | async)!"
+        >
+        </app-detail-list>
+
+        <app-linked-cards [cards]="account.linkedCards"></app-linked-cards>
+      </div>
+
+      <!-- Right Column -->
+      <div class="flex flex-col gap-8">
+        <app-detail-list
+          [title]="'Account Holder'"
+          subtitle="Personal information"
+          icon="pi pi-user"
+          [items]="(accountHolderItems$ | async)!"
+        >
+        </app-detail-list>
+
+        <app-active-loans [loans]="account.activeLoans"></app-active-loans>
+      </div>
+    </main>
+
+    <app-close-account-dialog
+      [(visible)]="isCloseDialogVisible"
+      [balance]="account.summary.availableBalance"
+      [currency]="account.summary.currency"
+      (formSubmit)="handleAccountClose($event, account.summary.accountNumber)"
+    >
+    </app-close-account-dialog>
+  </ng-container>
+</div>

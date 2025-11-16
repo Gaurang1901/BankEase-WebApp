@@ -74,7 +74,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     ],
   },
   {
-    routeLink: 'user-account',
+    routeLink: 'user/user-account',
     icon: 'pi pi-wallet',
     label: 'My Account',
     permission: {
@@ -83,7 +83,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     },
   },
   {
-    routeLink: 'user-transactions',
+    routeLink: 'user/user-transactions',
     icon: 'pi pi-arrow-right-arrow-left',
     label: 'My Transactions',
     permission: {

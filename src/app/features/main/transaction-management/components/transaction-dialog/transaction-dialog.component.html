@@ -1,0 +1,110 @@
+<p-dialog
+  [(visible)]="visible"
+  (visibleChange)="visibleChange.emit($event)"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  header="{{ dialogTitle }}"
+  class="!bg-background"
+  styleClass="w-full max-w-md mx-4 bg-gray-300 dark:bg-background text-foreground rounded-lg shadow-xl"
+>
+  <ng-template pTemplate="header">
+    <div>
+      <h2 class="text-2xl font-bold text-foreground">{{ dialogTitle }}</h2>
+      <p class="text-secondary-600 dark:text-secondary-400">{{ dialogSubtitle }}</p>
+    </div>
+  </ng-template>
+
+  <form
+    *ngIf="transactionForm"
+    [formGroup]="transactionForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="py-4 space-y-6">
+      <!-- Amount -->
+      <div>
+        <label for="amount" class="font-semibold text-foreground mb-2 block"
+          >Amount *</label
+        >
+        <p-inputNumber
+          inputId="amount"
+          formControlName="amount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          placeholder="Enter amount"
+          styleClass="w-full rounded-xl bg-background"
+        >
+        </p-inputNumber>
+      </div>
+
+      <!-- Recipient Account (Transfer only) -->
+      <div *ngIf="type === 'Transfer'">
+        <label for="recipient" class="font-semibold text-foreground mb-2 block"
+          >Recipient Account Number *</label
+        >
+        <input
+          pInputText
+          id="recipient"
+          formControlName="recipientAccountNumber"
+          placeholder="Enter account number"
+          class="w-full rounded-xl"
+        />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label
+          for="description"
+          class="font-semibold text-foreground mb-2 block"
+          >Description</label
+        >
+        <textarea
+          pInputTextarea
+          id="description"
+          formControlName="description"
+          placeholder="Optional description"
+          [autoResize]="true"
+          rows="2"
+          class="w-full rounded-xl"
+        >
+        </textarea>
+      </div>
+
+      <!-- Summary -->
+      <div class="bg-card dark:bg-gray-800 p-4 rounded-lg space-y-2 text-sm">
+        <div class="flex justify-between">
+          <span class="text-foreground">Transaction Type:</span>
+          <span class="font-medium text-foreground">{{ type }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-foreground">Amount:</span>
+          <span class="font-medium text-foreground">{{
+            transactionForm.value.amount | currency : "USD"
+          }}</span>
+        </div>
+        <div *ngIf="type === 'Transfer'" class="flex justify-between">
+          <span class="text-foreground-tertiary">To:</span>
+          <span class="font-medium text-foreground">{{
+            transactionForm.value.recipientAccountNumber || "-"
+          }}</span>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancel"
+      (click)="onCancel()"
+      styleClass="p-button-secondary"
+    ></p-button>
+    <p-button
+      [label]="'Confirm ' + type"
+      (click)="onSubmit()"
+      [loading]="isSubmitting"
+      [disabled]="transactionForm.invalid || isSubmitting"
+    >
+    </p-button>
+  </ng-template>
+</p-dialog>

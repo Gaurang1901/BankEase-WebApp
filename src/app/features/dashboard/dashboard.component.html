@@ -1,4 +1,6 @@
 <app-admin-dashboard
+  *ngIf="userData?.roles === 'ROLE_ADMIN'"
 ></app-admin-dashboard>
-<!-- *ngIf="userData?.roles === 'ROLE_ADMIN'" -->
-<!-- <app-user-dashboard></app-user-dashboard> -->
+<app-user-dashboard
+  *ngIf="userData?.roles === 'ROLE_USER'"   
+></app-user-dashboard>

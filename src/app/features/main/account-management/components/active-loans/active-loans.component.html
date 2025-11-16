@@ -1,0 +1,19 @@
+<div class="bg-card rounded-lg border border-secondary p-6 shadow-lg h-full">
+  <div class="flex items-center mb-4">
+    <i class="pi pi-dollar text-secondary mr-3 text-xl"></i>
+    <div>
+      <h3 class="text-lg font-semibold text-foreground">Active Loans</h3>
+      <p class="text-sm text-secondary">Loans associated with this account</p>
+    </div>
+  </div>
+  <div *ngIf="loans.length > 0; else noLoans">
+    <!-- Loan list would go here -->
+  </div>
+  <ng-template #noLoans>
+    <div
+      class="flex items-center justify-center h-24 border-2 border-dashed border-gray-700 rounded-lg"
+    >
+      <p class="text-gray-500">No active loans</p>
+    </div>
+  </ng-template>
+</div>
