@@ -11,13 +11,13 @@
         </p>
       </div>
       <div class="flex items-center space-x-2 mt-4 sm:mt-0">
-        <p-button
+        <!-- <p-button
           label="Edit Account"
           icon="pi pi-pencil"
           size="small"
           outlined="true"
           styleClass="!border-2 !border-secondary-400"
-        ></p-button>
+        ></p-button> -->
         <p-button
           label="Close Account"
           icon="pi pi-times"
@@ -36,35 +36,33 @@
           <i class="pi pi-wallet text-2xl"></i>
         </div>
         <div>
-          <p class="font-light">{{ account.summary.accountType }}</p>
+          <p class="font-light">{{ account.data.accountTypes }}</p>
           <h2 class="text-xl font-semibold">
-            {{ account.summary.accountName }}
+            {{ account.data.user.name }}
           </h2>
         </div>
       </div>
       <div>
         <p class="text-sm text-secondary-400">Available Balance</p>
         <p class="text-4xl font-bold tracking-tight">
-          {{
-            account.summary.availableBalance
-              | currency : account.summary.currency : "symbol" : "1.2-2"
-          }}
+          {{ account.data.balance | currency : "INR" }}
+          <!-- <span class="text-secondary-400">INR</span> -->
         </p>
       </div>
       <div class="flex justify-between items-end mt-6">
         <div>
           <p class="text-xs text-secondary-400">Account Number</p>
-          <p class="font-mono text-sm">{{ account.summary.accountNumber }}</p>
+          <p class="font-mono text-sm">{{ account.data.accountNumber }}</p>
         </div>
         <div class="text-right">
           <p class="text-xs text-secondary-400">Account Holder</p>
           <p class="text-sm font-semibold">
-            {{ account.summary.accountHolder }}
+            {{ account.data.user.name }}
           </p>
         </div>
       </div>
       <p-tag
-        [value]="account.summary.status"
+        [value]="account.data.accountStatus"
         severity="success"
         styleClass="absolute top-4 right-4 capitalize"
       ></p-tag>
@@ -82,7 +80,7 @@
         >
         </app-detail-list>
 
-        <app-linked-cards [cards]="account.linkedCards"></app-linked-cards>
+        <app-linked-cards [cards]="account.data.cards"></app-linked-cards>
       </div>
 
       <!-- Right Column -->
@@ -95,15 +93,15 @@
         >
         </app-detail-list>
 
-        <app-active-loans [loans]="account.activeLoans"></app-active-loans>
+        <app-active-loans [loans]="account.data.loans"></app-active-loans>
       </div>
     </main>
 
     <app-close-account-dialog
       [(visible)]="isCloseDialogVisible"
-      [balance]="account.summary.availableBalance"
-      [currency]="account.summary.currency"
-      (formSubmit)="handleAccountClose($event, account.summary.accountNumber)"
+      [balance]="account.data.balance"
+      [currency]="'INR'"
+      (formSubmit)="handleAccountClose($event, account.data.accountNumber)"
     >
     </app-close-account-dialog>
   </ng-container>

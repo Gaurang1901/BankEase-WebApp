@@ -63,13 +63,25 @@ export class RecentTransactionTableComponent {
     data: Paging,
     componentInstance: RecentTransactionTableComponent
   ): Observable<CommonResponseModel<PagingMaster<UserRecenttTransactions>>> {
-    return componentInstance.dashboardService
-      .getRecentTransactionsByUserId(
-        componentInstance.user?.accountId ?? '',
-        new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString(),
-        new Date().toISOString(),
-        data
-      )
-      .pipe(tap((response) => {}));
+    if (
+      componentInstance.user?.accountId === null ||
+      componentInstance.user === null ||
+      componentInstance.user === undefined
+    ) {
+      return new Observable<
+        CommonResponseModel<PagingMaster<UserRecenttTransactions>>
+      >();
+    } else {
+      return componentInstance.dashboardService
+        .getRecentTransactionsByUserId(
+          componentInstance.user?.accountId ?? '',
+          new Date(
+            new Date().setMonth(new Date().getMonth() - 1)
+          ).toISOString(),
+          new Date().toISOString(),
+          data
+        )
+        .pipe(tap((response) => {}));
+    }
   }
 }

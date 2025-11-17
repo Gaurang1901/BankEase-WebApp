@@ -10,6 +10,7 @@ export interface User {
   exp?: number;
   userId?: string;
   accountId?: string;
+  accountNumber?: string;
   username?: string;
 }
 

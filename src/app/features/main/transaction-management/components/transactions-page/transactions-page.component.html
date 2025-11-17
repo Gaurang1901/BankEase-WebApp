@@ -13,7 +13,7 @@
   <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <!-- Deposit Card -->
     <div
-      (click)="openTransactionDialog('Deposit')"
+      (click)="openTransactionDialog('DEPOSIT')"
       class="bg-card border border-secondary rounded-lg p-6 flex flex-col items-center text-center cursor-pointer hover:bg-gray-700/50 transition-colors duration-300"
     >
       <div
@@ -27,7 +27,7 @@
 
     <!-- Withdraw Card -->
     <div
-      (click)="openTransactionDialog('Withdraw')"
+      (click)="openTransactionDialog('WITHDRAW')"
       class="bg-card border border-secondary rounded-lg p-6 flex flex-col items-center text-center cursor-pointer hover:bg-gray-700/50 transition-colors duration-300"
     >
       <div
@@ -41,7 +41,7 @@
 
     <!-- Transfer Card -->
     <div
-      (click)="openTransactionDialog('Transfer')"
+      (click)="openTransactionDialog('TRANSFER')"
       class="bg-card border border-secondary rounded-lg p-6 flex flex-col items-center text-center cursor-pointer hover:bg-gray-700/50 transition-colors duration-300"
     >
       <div
@@ -62,26 +62,28 @@
     <div class="bg-card border border-secondary rounded-lg p-6">
       <p class="text-secondary-500 mb-2">Total Deposits</p>
       <p class="text-3xl font-bold text-green-400">
-        {{ summary.totalDeposits | currency : "USD" }}
+        {{ summary.totalDeposits | currency : "INR" }}
       </p>
     </div>
     <div class="bg-card border border-secondary rounded-lg p-6">
       <p class="text-secondary-500 mb-2">Total Withdrawals</p>
       <p class="text-3xl font-bold text-red-400">
-        {{ summary.totalWithdrawals | currency : "USD" }}
+        {{ summary.totalWithdrawals | currency : "INR" }}
       </p>
     </div>
     <div class="bg-card border border-secondary rounded-lg p-6">
       <p class="text-secondary-500 mb-2">Total Transfers</p>
       <p class="text-3xl font-bold text-blue-400">
-        {{ summary.totalTransfers | currency : "USD" }}
+        {{ summary.totalTransfers | currency : "INR" }}
       </p>
     </div>
   </section>
 
-  <div class="my-4 p-2 rounded-xl border border-secondary-200 flex flex-col gap-2">
+  <div
+    class="my-4 p-2 rounded-xl border border-secondary-200 flex flex-col gap-2"
+  >
     <span>
-      <p class="text-secondary-500 mb-2">Transactions List </p>
+      <p class="text-secondary-500 mb-2">Transactions List</p>
     </span>
     <app-transaction-table></app-transaction-table>
   </div>

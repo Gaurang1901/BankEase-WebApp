@@ -7,13 +7,15 @@ export interface Account {
 }
 
 export interface AccountSummary {
-  accountType: string;
-  accountName: string;
-  availableBalance: number;
+  accountId: string;
   accountNumber: string;
-  accountHolder: string;
-  status: 'active' | 'inactive' | 'closed';
-  currency: string;
+  accountTypes: string;
+  accountStatus: string;
+  balance: number;
+  createdAt: string;
+  user: AccountHolder;
+  cards: LinkedCard[];
+  loans: ActiveLoan[];
 }
 
 export interface AccountDetails {
@@ -26,27 +28,45 @@ export interface AccountDetails {
 }
 
 export interface AccountHolder {
-  fullName: string;
+  id: string;
+  name: string;
   email: string;
-  phone: string;
-  address: string;
+  phoneNo: string;
+  address: AddressModel;
+  userRole: string;
+  dateOfBirth: string | Date;
+  accounts: string[];
+}
+
+export interface AddressModel {
+  id: string;
+  addressLine1: string;
+  addressLine2: string;
   city: string;
-  dateOfBirth: string; // ISO date string
+  stateId: string;
+  stateName: string;
+  pinCode: string;
+  userId: string;
 }
 
 export interface LinkedCard {
-  id: string;
-  cardType: 'Visa' | 'Mastercard';
-  category: 'Debit' | 'Credit';
-  last4Digits: string;
-  isPrimary: boolean;
+  cardId: string;
+  cardNumber: string;
+  cardType: string;
+  cardStatus: string;
 }
 
 export interface ActiveLoan {
-  id: string;
+  loanId: string;
+  loanNumber: string;
+  principalAmount: number;
+  interestRate: number;
+  totalMonths: number;
+  emiAmount: number;
+  totalAmountPaid: number;
   loanType: string;
-  outstandingBalance: number;
-  nextPaymentDate: string; // ISO date string
+  loanStatus: string;
+  appliedDate: string;
 }
 
 export interface DetailListItem {

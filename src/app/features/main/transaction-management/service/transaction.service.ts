@@ -7,12 +7,13 @@ import {
   TransactionPayload,
   TransactionType,
 } from '../models/transaction.model';
+import { ApiService } from '../../../../core/auth/services/api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransactionService {
-  private http = inject(HttpClient);
+  private http = inject(ApiService);
 
   /**
    * Fetches the summary of all transactions for a given account.
@@ -29,34 +30,17 @@ export class TransactionService {
     };
     return of(mockSummary).pipe(delay(500));
   }
-
-  /**
-   * Executes a financial transaction (Deposit, Withdraw, or Transfer).
-   * @param accountId The source account ID.
-   * @param idempotencyKey A unique key (UUID) to prevent duplicate transactions.
-   * @param transactionType The type of transaction.
-   * @param payload The transaction data.
-   */
   executeTransaction(
-    accountId: string,
+    userId: string,
     idempotencyKey: string,
-    transactionType: TransactionType,
     payload: TransactionPayload
-  ): Observable<{ success: boolean }> {
+  ): Observable<any> {
     const headers = new HttpHeaders({
-      'X-Idempotency-Key': idempotencyKey,
+      'Idempotency-Key': idempotencyKey,
     });
 
-    // The endpoint can be dynamic based on the transaction type
-    const endpoint = `/api/accounts/${accountId}/${transactionType.toLowerCase()}`;
+    const endpoint = `/api/users/transaction/${userId}`;
 
-    console.log(`Executing ${transactionType} to endpoint: ${endpoint}`);
-    console.log('Payload:', payload);
-    console.log('Idempotency Key:', idempotencyKey);
-
-    // Replace with a real API call:
-    // return this.http.post<{ success: boolean }>(endpoint, payload, { headers });
-
-    return of({ success: true }).pipe(delay(1500));
+    return this.http.post(endpoint, payload, { headers });
   }
 }

@@ -1,4 +1,4 @@
-export type TransactionType = 'Deposit' | 'Withdraw' | 'Transfer';
+export type TransactionType = 'DEPOSIT' | 'WITHDRAW' | 'TRANSFER';
 
 export interface TransactionSummary {
   totalDeposits: number;
@@ -7,12 +7,14 @@ export interface TransactionSummary {
 }
 
 export interface BaseTransactionPayload {
+  fromAccountNumber: string;
+  toAccountNumber?: string;
   amount: number;
-  description?: string;
+  transactionType: 'DEPOSIT' | 'WITHDRAW' | 'TRANSFER';
+  description: string;
+  referenceNumber?: string;
+  transactionChannel?: String;
+  budgetCategory?: String;
 }
 
-export interface TransferPayload extends BaseTransactionPayload {
-  recipientAccountNumber: string;
-}
-
-export type TransactionPayload = BaseTransactionPayload | TransferPayload;
+export type TransactionPayload = BaseTransactionPayload;

@@ -22,6 +22,11 @@ import {
   TransactionType,
   TransactionPayload,
 } from '../../models/transaction.model';
+import { Select } from 'primeng/select';
+import { Enum } from '../../../../../core/types/helper.model';
+import { BUDGET_CATEGORY } from '../../../../../core/types/constants';
+import { AuthService } from '../../../../../core/auth/services/auth.service';
+import { User } from '../../../../../core/auth/store/auth.state';
 
 export interface TransactionSubmitEvent {
   payload: TransactionPayload;
@@ -40,6 +45,7 @@ export interface TransactionSubmitEvent {
     InputNumberModule,
     InputTextModule,
     TextareaModule,
+    Select,
   ],
   templateUrl: './transaction-dialog.component.html',
 })
@@ -52,8 +58,10 @@ export class TransactionDialogComponent implements OnChanges {
   transactionForm!: FormGroup;
   isSubmitting = false;
   private idempotencyKey!: string;
+  budgetCategories: Enum[] = Object.values(BUDGET_CATEGORY);
+  user: User | null = null;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     // Re-initialize the form and generate a new UUID whenever the dialog is made visible
@@ -67,16 +75,31 @@ export class TransactionDialogComponent implements OnChanges {
     // Generate a unique Idempotency Key for this specific transaction attempt
     this.idempotencyKey = crypto.randomUUID();
     this.buildForm();
+    this.authService.getUserProfile().subscribe((user) => {
+      if (user === null) return;
+      this.user = user;
+      this.transactionForm.patchValue({
+        fromAccountNumber: user.accountNumber,
+      });
+    });
   }
 
   private buildForm(): void {
     const formConfig: { [key: string]: any } = {
       amount: [null, [Validators.required, Validators.min(0.01)]],
+      fromAccountNumber: [
+        this.user?.accountNumber,
+        [Validators.required, Validators.minLength(5)],
+      ],
       description: [''],
+      referenceNumber: [null],
+      transactionChannel: ['NEFT'],
+      budgetCategory: [null],
+      transactionType: this.type,
     };
 
-    if (this.type === 'Transfer') {
-      formConfig['recipientAccountNumber'] = [
+    if (this.type === 'TRANSFER') {
+      formConfig['toAccountNumber'] = [
         '',
         [Validators.required, Validators.minLength(5)],
       ];
@@ -90,11 +113,11 @@ export class TransactionDialogComponent implements OnChanges {
   }
   get dialogSubtitle(): string {
     switch (this.type) {
-      case 'Deposit':
+      case 'DEPOSIT':
         return 'Add money to your account';
-      case 'Withdraw':
+      case 'WITHDRAW':
         return 'Withdraw money from your account';
-      case 'Transfer':
+      case 'TRANSFER':
         return 'Transfer money to another account';
     }
   }

@@ -6,7 +6,7 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { TableComponent } from '../../../../../components/table/table.component';
 import { ApiService } from '../../../../../core/auth/services/api.service';
 import { CustomTableService } from '../../../../../core/services/table.service';
@@ -16,6 +16,7 @@ import {
   CommonResponseModel,
   PagingMaster,
 } from '../../../../../core/types/helper.model';
+import { AuthService } from '../../../../../core/auth/services/auth.service';
 
 @Component({
   selector: 'app-transaction-table',
@@ -34,14 +35,27 @@ export class TransactionTableComponent implements OnInit, AfterViewInit {
   exportUrl = '/transactions/export';
 
   selectedTransactionType: string = 'ALL';
+  accountId!: string;
 
   // use functional inject to match patterns in project
   api: ApiService = inject(ApiService);
+  authService: AuthService = inject(AuthService);
   private _tableService: CustomTableService = inject(CustomTableService);
 
   ngOnInit(): void {
     // initial column setup without the custom filter template assigned yet
     this.columns = [
+      {
+        header: 'Transaction Date',
+        field: 'transactionDate',
+        cellRenderer: (row: any) =>
+          new Date(row.transactionDate).toDateString() ?? '-',
+      },
+      {
+        header: 'Transaction Number',
+        field: 'transactionNumber',
+        cellRenderer: (row: any) => row.transactionNumber ?? '-',
+      },
       {
         header: 'Transaction Type',
         field: 'transactionType',
@@ -54,14 +68,14 @@ export class TransactionTableComponent implements OnInit, AfterViewInit {
           row.amount != null
             ? Number(row.amount).toLocaleString(undefined, {
                 style: 'currency',
-                currency: 'USD',
+                currency: 'INR',
               })
             : '-',
       },
       {
         header: 'Transaction Status',
-        field: 'status',
-        cellRenderer: (row: any) => row.status ?? '-',
+        field: 'transactionStatus',
+        cellRenderer: (row: any) => row.transactionStatus ?? '-',
       },
       {
         header: 'Description',
@@ -70,16 +84,23 @@ export class TransactionTableComponent implements OnInit, AfterViewInit {
       },
       {
         header: 'Remaining Balance',
-        field: 'remainingBalance',
+        field: 'balanceAfter',
         cellRenderer: (row: any) =>
-          row.remainingBalance != null
-            ? Number(row.remainingBalance).toLocaleString(undefined, {
+          row.balanceAfter != null
+            ? Number(row.balanceAfter).toLocaleString(undefined, {
                 style: 'currency',
-                currency: 'USD',
+                currency: 'INR',
               })
             : '-',
       },
     ];
+
+    this.authService.getUserProfile().subscribe((user) => {
+      if (user) {
+        this.accountId = user.accountId!;
+        this._tableService.setrefreshTable(true);
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -92,22 +113,32 @@ export class TransactionTableComponent implements OnInit, AfterViewInit {
   // getDataFunc - matches the signature expected by the reusable table component
   getData = (
     paging: Paging,
-    componentInstance?: any
+    componentInstance?: TransactionTableComponent
   ): Observable<CommonResponseModel<PagingMaster<any>>> => {
-    const params: any = {
-      page: paging.page ?? 0,
-      size: paging.size ?? this.paginationPageSize,
-    };
+    if (componentInstance?.accountId) {
+      const params: any = {
+        page: paging.page ?? 0,
+        size: 10,
+        sortBy: paging.sortBy ?? 'createdAt',
+        sortDir: paging.sortDir ?? 'desc',
+      };
 
-    if (
-      this.selectedTransactionType &&
-      this.selectedTransactionType !== 'ALL'
-    ) {
-      params.transactionType = this.selectedTransactionType;
+      if (
+        componentInstance.selectedTransactionType &&
+        componentInstance.selectedTransactionType !== 'ALL'
+      ) {
+        params.transactionType = componentInstance.selectedTransactionType;
+      }
+
+      return componentInstance.api.get(
+        `/api/users/transaction/account/${componentInstance.accountId}`,
+        {
+          params,
+        } as any
+      );
+    } else {
+      return of({} as any);
     }
-
-    // ApiService.get is expected to return the correct typed Observable
-    return this.api.get('/transactions', { params } as any);
   };
 
   onFilterChange(value: string) {

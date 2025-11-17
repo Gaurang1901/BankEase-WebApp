@@ -15,7 +15,7 @@ import {
 import { TransactionService } from '../../service/transaction.service';
 import { PageHeaderService } from '../../../../../core/services/page-header.service';
 import { AuthService } from '../../../../../core/auth/services/auth.service';
-import { TransactionTableComponent } from "../transaction-table/transaction-table.component";
+import { TransactionTableComponent } from '../transaction-table/transaction-table.component';
 
 @Component({
   selector: 'app-transactions-page',
@@ -25,8 +25,8 @@ import { TransactionTableComponent } from "../transaction-table/transaction-tabl
     CurrencyPipe,
     ToastModule,
     TransactionDialogComponent,
-    TransactionTableComponent
-],
+    TransactionTableComponent,
+  ],
   providers: [MessageService],
   templateUrl: './transactions-page.component.html',
 })
@@ -49,7 +49,7 @@ export class TransactionsPageComponent implements OnInit {
 
     this.authService.getUserProfile().subscribe((user) => {
       if (user) {
-        this.accountId = user.accountId!;
+        this.accountId = user.userId!;
         this.summary$ = this.transactionService.getTransactionSummary(
           this.accountId
         );
@@ -68,12 +68,7 @@ export class TransactionsPageComponent implements OnInit {
     const { payload, idempotencyKey } = event;
 
     this.transactionService
-      .executeTransaction(
-        this.accountId,
-        idempotencyKey,
-        this.currentTransactionType,
-        payload
-      )
+      .executeTransaction(this.accountId, idempotencyKey, payload)
       .subscribe({
         next: () => {
           this.messageService.add({

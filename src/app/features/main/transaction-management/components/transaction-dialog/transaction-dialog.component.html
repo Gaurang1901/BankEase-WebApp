@@ -11,7 +11,9 @@
   <ng-template pTemplate="header">
     <div>
       <h2 class="text-2xl font-bold text-foreground">{{ dialogTitle }}</h2>
-      <p class="text-secondary-600 dark:text-secondary-400">{{ dialogSubtitle }}</p>
+      <p class="text-secondary-600 dark:text-secondary-400">
+        {{ dialogSubtitle }}
+      </p>
     </div>
   </ng-template>
 
@@ -39,7 +41,7 @@
       </div>
 
       <!-- Recipient Account (Transfer only) -->
-      <div *ngIf="type === 'Transfer'">
+      <div *ngIf="type === 'TRANSFER'">
         <label for="recipient" class="font-semibold text-foreground mb-2 block"
           >Recipient Account Number *</label
         >
@@ -70,6 +72,36 @@
         >
         </textarea>
       </div>
+      <div>
+        <label
+          for="budgetCategory"
+          class="font-semibold text-foreground mb-2 block"
+          >Budget Category (optional)</label
+        >
+        <p-select
+          id="budgetCategory"
+          formControlName="budgetCategory"
+          [options]="budgetCategories"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select budget category"
+          class="w-full rounded-xl"
+        />
+      </div>
+      <div>
+        <label
+          for="referenceNumber"
+          class="font-semibold text-foreground mb-2 block"
+          >Reference Number (optional)</label
+        >
+        <p-inputNumber
+          id="referenceNumber"
+          formControlName="referenceNumber"
+          placeholder="Enter reference number"
+          [useGrouping]="false"
+          class="w-full rounded-xl"
+        />
+      </div>
 
       <!-- Summary -->
       <div class="bg-card dark:bg-gray-800 p-4 rounded-lg space-y-2 text-sm">
@@ -83,7 +115,7 @@
             transactionForm.value.amount | currency : "USD"
           }}</span>
         </div>
-        <div *ngIf="type === 'Transfer'" class="flex justify-between">
+        <div *ngIf="type === 'TRANSFER'" class="flex justify-between">
           <span class="text-foreground-tertiary">To:</span>
           <span class="font-medium text-foreground">{{
             transactionForm.value.recipientAccountNumber || "-"
