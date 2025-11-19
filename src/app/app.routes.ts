@@ -41,18 +41,25 @@ export const routes: Routes = [
             pathMatch: 'full',
           },
           {
-            path: 'user-account',
+            path: 'account',
             loadComponent: () =>
               import(
                 './features/main/account-management/components/account-overview/account-overview.component'
               ).then((m) => m.AccountOverviewComponent),
           },
           {
-            path: 'user-transactions',
+            path: 'transactions',
             loadComponent: () =>
               import(
                 './features/main/transaction-management/components/transactions-page/transactions-page.component'
               ).then((m) => m.TransactionsPageComponent),
+          },
+          {
+            path: 'cards',
+            loadComponent: () =>
+              import(
+                './features/main/card-management/components/card-management/card-management.component'
+              ).then((m) => m.CardManagementComponent),
           },
         ],
       },

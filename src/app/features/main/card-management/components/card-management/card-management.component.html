@@ -1,0 +1,38 @@
+<div class="min-h-screen bg-background text-foreground p-6 md:p-10 font-sans">
+  <!-- Header Section -->
+  <header
+    class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4"
+  >
+    <div>
+      <h1 class="text-3xl font-bold tracking-tight text-foreground mb-1">
+        Card Management
+      </h1>
+      <p class="dark:text-gray-400 text-gray-600 text-sm">
+        Manage your debit and credit cards
+      </p>
+    </div>
+
+    <button
+      pButton
+      label="Request New Card"
+      icon="pi pi-plus"
+      class="!bg-blue-600 !border-blue-600 hover:!bg-blue-700 !px-5 !py-2.5 !rounded-lg !font-semibold !text-sm"
+      (click)="openRequestCardDialog()"
+    ></button>
+  </header>
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    @for (card of cards(); track card.id) {
+    <app-card-item
+      [cardData]="card"
+      (onBlock)="confirmBlock($event)"
+      (onViewTransactions)="viewTransactions($event)"
+    >
+    </app-card-item>
+    }
+  </div>
+</div>
+
+<app-request-card-dialog
+  [visible]="isRequestCardDialogVisible"
+  (visibleChange)="onRequestCardDialogClose($event)"
+></app-request-card-dialog>

@@ -1,0 +1,85 @@
+<div
+  class="flex flex-col gap-4 p-4 rounded-2xl bg-card border border-secondary h-full"
+>
+  <!-- Visual Card (Colored Area) -->
+  <div
+    class="relative w-full rounded-xl p-6 text-foreground shadow-lg overflow-hidden transition-transform hover:scale-[1.01] duration-300"
+    [ngClass]="backgroundClasses()"
+  >
+    <!-- Card Header -->
+    <div class="flex justify-between items-start mb-8">
+      <i class="pi pi-credit-card text-3xl"></i>
+      <p-tag
+        [value]="cardData().type"
+        [styleClass]="tagClasses()"
+        class="font-medium tracking-wide"
+      >
+      </p-tag>
+    </div>
+
+    <!-- Card Number -->
+    <div class="mb-6">
+      <p class="text-xs opacity-80 mb-1">Card Number</p>
+      <div class="text-2xl font-bold tracking-widest font-mono">
+        {{ formattedCardNumber() }}
+      </div>
+    </div>
+
+    <!-- Footer Info -->
+    <div class="flex justify-between items-end">
+      <div>
+        <p class="text-xs opacity-80 mb-1">Expires</p>
+        <p class="font-medium">{{ cardData().expiry }}</p>
+      </div>
+      <div class="text-right">
+        <p class="text-xs opacity-80 mb-1">CVV</p>
+        <p class="font-medium text-lg tracking-widest">***</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Details & Actions (Black Area) -->
+  <div class="flex flex-col gap-4 mt-2">
+    <!-- Credit Limit (Conditional) -->
+    <div class="flex justify-between items-center min-h-[24px]">
+      @if (cardData().creditLimit) {
+      <span class="dark:text-gray-400 text-gray-700 text-sm">Credit Limit</span>
+      <span class="text-foreground font-bold">{{
+        cardData().creditLimit | currency : "INR"
+      }}</span>
+      }
+    </div>
+
+    <!-- Status Row -->
+    <div class="flex justify-between items-center">
+      <span class="dark:text-gray-400 text-gray-700 text-sm">Status</span>
+      <p-tag
+        [value]="cardData().status"
+        severity="info"
+        styleClass="!bg-blue-500/20 !text-blue-400 uppercase text-xs font-bold px-3"
+      ></p-tag>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="grid grid-cols-2 gap-3 mt-2">
+      <p-button
+        icon="pi pi-lock"
+        label="Block Card"
+        (onClick)="onBlock.emit(cardData())"
+        [size]="'small'"
+        styleClass="w-full"
+        severity="secondary"
+      >
+      </p-button>
+
+      <p-button
+        icon=""
+        label="View Transactions"
+        [size]="'small'"
+        styleClass="w-full"
+        (onClick)="onViewTransactions.emit(cardData())"
+      >
+      </p-button>
+    </div>
+  </div>
+</div>

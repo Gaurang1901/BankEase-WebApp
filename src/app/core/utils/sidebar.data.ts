@@ -74,7 +74,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     ],
   },
   {
-    routeLink: 'user/user-account',
+    routeLink: 'user/account',
     icon: 'pi pi-wallet',
     label: 'My Account',
     permission: {
@@ -83,7 +83,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     },
   },
   {
-    routeLink: 'user/user-transactions',
+    routeLink: 'user/transactions',
     icon: 'pi pi-arrow-right-arrow-left',
     label: 'My Transactions',
     permission: {
@@ -92,7 +92,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     },
   },
   {
-    routeLink: 'user-cards',
+    routeLink: 'user/cards',
     icon: 'pi pi-credit-card',
     label: 'My Cards',
     permission: {
@@ -101,7 +101,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     },
   },
   {
-    routeLink: 'user-loans',
+    routeLink: 'user/loans',
     icon: 'pi pi-dollar',
     label: 'My Loans',
     permission: {
@@ -110,7 +110,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     },
   },
   {
-    routeLink: 'savings-goals',
+    routeLink: 'user/savings-goals',
     icon: 'pi pi-money-bill',
     label: 'My Savings Goals',
     permission: {
@@ -119,7 +119,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     },
   },
   {
-    routeLink: 'analytics',
+    routeLink: 'user/analytics',
     icon: 'pi pi-chart-bar',
     label: 'Analytics',
     permission: {
@@ -128,7 +128,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     },
   },
   {
-    routeLink: 'budgets',
+    routeLink: 'user/budgets',
     icon: 'pi pi-wallet',
     label: 'Budgets',
     permission: {
@@ -137,7 +137,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     },
   },
   {
-    routeLink: 'statements',
+    routeLink: 'user/statements',
     icon: 'pi pi-file',
     label: 'Statements',
     permission: {

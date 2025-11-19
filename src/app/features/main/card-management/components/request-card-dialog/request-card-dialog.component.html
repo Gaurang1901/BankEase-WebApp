@@ -1,0 +1,57 @@
+<p-dialog
+  [(visible)]="visible"
+  header="Request New Card"
+  [draggable]="false"
+  [style]="{ width: '400px' }"
+  [modal]="true"
+  [resizable]="false"
+  [closable]="true"
+>
+  <form [formGroup]="requestCardForm">
+    <app-input-group
+      label="Card Holder Name"
+      id="cardHolderName"
+      [formObj]="formHelper.getFormControl(requestCardForm, 'cardHolderName')"
+      [errorMessages]="{
+        required: 'Please enter a card holder name',
+        minlength: 'Card holder name must be at least 2 characters long'
+      }"
+      [isRequired]="true"
+    >
+      <input
+        pInputText
+        id="cardHolderName"
+        formControlName="cardHolderName"
+        class="w-full"
+        [maxlength]="50"
+      />
+    </app-input-group>
+    <app-input-group
+      label="Card Type"
+      id="cardType"
+      [formObj]="formHelper.getFormControl(requestCardForm, 'cardType')"
+      [errorMessages]="{
+        required: 'Please select a card type'
+      }"
+      [isRequired]="true"
+    >
+      <p-select
+        id="cardType"
+        formControlName="cardType"
+        [options]="cardTypes"
+        class="w-full rounded-xl"
+        styleClass="w-full rounded-xl"
+        [appendTo]="'body'"
+      ></p-select>
+    </app-input-group>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" (click)="close()"></p-button>
+    <p-button
+      label="Request Card"
+      (click)="onRequestCard()"
+      [loading]="isSubmitting"
+    ></p-button>
+  </ng-template>
+</p-dialog>
