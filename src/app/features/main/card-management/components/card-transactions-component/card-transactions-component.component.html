@@ -1,1 +1,18 @@
-<p>card-transactions-component works!</p>
+<p-dialog
+  [(visible)]="visible"
+  [draggable]="false"
+  [closable]="true"
+  [header]="'Card Transactions'"
+  [resizable]="false"
+  [style]="{ width: '70vw' }"
+  (onHide)="onClose()"
+>
+  <div class="flex flex-col gap-4 rounded-xl">
+    <app-table
+      [columns]="columns"
+      [getDataFunc]="getCardTransactions"
+      [paginationPageSize]="paging.size"
+      [componentInstance]="this"
+    ></app-table>
+  </div>
+</p-dialog>

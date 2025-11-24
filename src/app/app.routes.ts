@@ -61,6 +61,20 @@ export const routes: Routes = [
                 './features/main/card-management/components/card-management/card-management.component'
               ).then((m) => m.CardManagementComponent),
           },
+          {
+            path: 'loans',
+            loadComponent: () =>
+              import(
+                './features/main/loan-management/components/loan-management/loan-management.component'
+              ).then((m) => m.LoanManagementComponent),
+          },
+          {
+            path: 'budgets',
+            loadComponent: () =>
+              import(
+                './features/main/budget-system/budget-system.component'
+              ).then((m) => m.BudgetSystemComponent),
+          },
         ],
       },
       // {

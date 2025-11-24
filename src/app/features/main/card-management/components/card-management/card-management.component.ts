@@ -10,6 +10,7 @@ import { CardItemComponent } from '../card-item/card-item.component';
 import { AuthService } from '../../../../../core/auth/services/auth.service';
 import { User } from '../../../../../core/auth/store/auth.state';
 import { RequestCardDialogComponent } from '../request-card-dialog/request-card-dialog.component';
+import { CardTransactionsComponentComponent } from '../card-transactions-component/card-transactions-component.component';
 
 @Component({
   selector: 'app-card-management',
@@ -20,11 +21,16 @@ import { RequestCardDialogComponent } from '../request-card-dialog/request-card-
     ConfirmDialogModule,
     ToastModule,
     RequestCardDialogComponent,
+    CardTransactionsComponentComponent,
   ],
   templateUrl: './card-management.component.html',
   styleUrl: './card-management.component.css',
 })
 export class CardManagementComponent {
+  isRequestCardTransactionDialogVisible: boolean = false;
+  onRequestCardTransactionDialogClose($event: any) {
+    this.isRequestCardTransactionDialogVisible = $event;
+  }
   openRequestCardDialog() {
     this.isRequestCardDialogVisible = true;
   }
@@ -38,6 +44,7 @@ export class CardManagementComponent {
   isLoading = signal<boolean>(true);
   user: User | null = null;
   isRequestCardDialogVisible: boolean = false;
+  selectedCardId: string | null = null;
 
   ngOnInit() {
     this.authService.getUserProfile().subscribe((user) => {
@@ -123,6 +130,8 @@ export class CardManagementComponent {
         -4
       )}`,
     });
+    this.isRequestCardTransactionDialogVisible = true;
+    this.selectedCardId = card.id;
   }
 
   onRequestCardDialogClose($event: {

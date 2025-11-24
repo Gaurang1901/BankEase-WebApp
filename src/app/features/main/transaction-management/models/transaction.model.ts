@@ -1,9 +1,9 @@
 export type TransactionType = 'DEPOSIT' | 'WITHDRAW' | 'TRANSFER';
 
 export interface TransactionSummary {
-  totalDeposits: number;
-  totalWithdrawals: number;
-  totalTransfers: number;
+  DEPOSIT: number;
+  WITHDRAW: number;
+  TRANSFER: number;
 }
 
 export interface BaseTransactionPayload {

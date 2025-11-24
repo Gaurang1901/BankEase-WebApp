@@ -1,0 +1,329 @@
+<p-dialog
+  [header]="'Update Loan - ' + (loan()?.loanType || 'Loan')"
+  [visible]="visible()"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="false"
+  [style]="{ width: '50vw', minWidth: '350px' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '95vw' }"
+  (onHide)="closeDialog('cancel')"
+>
+  <form
+    [formGroup]="loanUpdateForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-6"
+  >
+    <!-- Loan Information Display -->
+    <div class="bg-card p-4 rounded-lg border border-secondary">
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <span class="text-muted-foreground">Loan Number:</span>
+          <span class="text-foreground font-semibold ml-2">{{
+            loan()?.loanNumber || "N/A"
+          }}</span>
+        </div>
+        <div>
+          <span class="text-muted-foreground">Current Principal:</span>
+          <span class="text-foreground font-semibold ml-2"
+            >${{ loan()?.principalAmount?.toLocaleString() || "0" }}</span
+          >
+        </div>
+        <div>
+          <span class="text-muted-foreground">Interest Rate:</span>
+          <span class="text-foreground font-semibold ml-2"
+            >{{ loan()?.interestRate || "0" }}%</span
+          >
+        </div>
+        <div>
+          <span class="text-muted-foreground">Current Tenure:</span>
+          <span class="text-foreground font-semibold ml-2"
+            >{{ loan()?.totalMonths || "0" }} months</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Update Type Selection -->
+    <div class="flex flex-col gap-2">
+      <label for="updateType" class="text-sm font-semibold text-foreground">
+        Update Type <span class="text-red-500">*</span>
+      </label>
+      <p-dropdown
+        id="updateType"
+        formControlName="updateType"
+        [options]="updateTypeOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Select update type"
+        [appendTo]="'body'"
+        [panelStyleClass]="'w-full'"
+        [style]="{ width: '100%' }"
+        styleClass="w-full"
+      ></p-dropdown>
+      @if (hasError('updateType')) {
+      <small class="text-red-500">{{ getErrorMessage("updateType") }}</small>
+      }
+    </div>
+
+    <!-- Conditional Fields Based on Update Type -->
+
+    <!-- Enhancement: Principal Amount & Tenure -->
+    @if (loanUpdateForm.get('updateType')?.value === 'Enhancement') {
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <label
+          for="principalAmount"
+          class="text-sm font-semibold text-foreground"
+        >
+          Additional Principal Amount <span class="text-red-500">*</span>
+        </label>
+        <p-inputNumber
+          id="principalAmount"
+          formControlName="principalAmount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          [style]="{ width: '100%' }"
+          styleClass="w-full"
+        ></p-inputNumber>
+        @if (hasError('principalAmount')) {
+        <small class="text-red-500">{{
+          getErrorMessage("principalAmount")
+        }}</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="totalMonths" class="text-sm font-semibold text-foreground">
+          New Tenure (Months) <span class="text-red-500">*</span>
+        </label>
+        <p-inputNumber
+          id="totalMonths"
+          formControlName="totalMonths"
+          [style]="{ width: '100%' }"
+          styleClass="w-full"
+        ></p-inputNumber>
+        @if (hasError('totalMonths')) {
+        <small class="text-red-500">{{ getErrorMessage("totalMonths") }}</small>
+        }
+      </div>
+
+      <!-- Summary Section -->
+      @if (loanUpdateForm.get('principalAmount')?.value) {
+      <div class="bg-primary/10 p-4 rounded-lg border border-primary/20">
+        <h4 class="text-sm font-semibold text-foreground mb-3">
+          Enhancement Summary
+        </h4>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <span class="text-muted-foreground">Current Principal:</span>
+            <span class="text-foreground font-semibold ml-2"
+              >${{ loan()?.principalAmount?.toLocaleString() || "0" }}</span
+            >
+          </div>
+          <div>
+            <span class="text-muted-foreground">Additional Amount:</span>
+            <span class="text-foreground font-semibold ml-2"
+              >${{
+                loanUpdateForm
+                  .get("principalAmount")
+                  ?.value?.toLocaleString() || "0"
+              }}</span
+            >
+          </div>
+          <div class="col-span-2 pt-2 border-t border-primary/20">
+            <span class="text-muted-foreground">Total Principal Amount:</span>
+            <span class="text-primary font-bold ml-2 text-base"
+              >${{ getTotalPrincipal().toLocaleString() || "0" }}</span
+            >
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Tenure Change: Tenure Only -->
+    @if (loanUpdateForm.get('updateType')?.value === 'Tenure_Change') {
+    <div class="flex flex-col gap-2">
+      <label for="totalMonths" class="text-sm font-semibold text-foreground">
+        Additional Tenure (Months) <span class="text-red-500">*</span>
+      </label>
+      <p-inputNumber
+        id="totalMonths"
+        formControlName="totalMonths"
+        [style]="{ width: '100%' }"
+        styleClass="w-full"
+      ></p-inputNumber>
+      @if (hasError('totalMonths')) {
+      <small class="text-red-500">{{ getErrorMessage("totalMonths") }}</small>
+      }
+    </div>
+    }
+
+    <!-- Repayment Method Change: Account Selection -->
+    @if (loanUpdateForm.get('updateType')?.value === 'Repayment_Method_Change')
+    {
+    <div class="flex flex-col gap-2">
+      <label for="accountNumber" class="text-sm font-semibold text-foreground">
+        New Repayment Account <span class="text-red-500">*</span>
+      </label>
+      <p-inputText
+        id="accountNumber"
+        formControlName="accountNumber"
+        [style]="{ width: '100%' }"
+        styleClass="w-full"
+      ></p-inputText>
+      @if (hasError('accountNumber')) {
+      <small class="text-red-500">{{ getErrorMessage("accountNumber") }}</small>
+      }
+    </div>
+    }
+
+    <!-- Part Prepayment: Prepayment Amount -->
+    @if (loanUpdateForm.get('updateType')?.value === 'Part_prepayment') {
+    <div class="flex flex-col gap-2">
+      <label
+        for="prePaymentAmount"
+        class="text-sm font-semibold text-foreground"
+      >
+        Prepayment Amount <span class="text-red-500">*</span>
+      </label>
+      <p-inputNumber
+        id="prePaymentAmount"
+        formControlName="prePaymentAmount"
+        mode="currency"
+        currency="USD"
+        locale="en-US"
+        [style]="{ width: '100%' }"
+        styleClass="w-full"
+      ></p-inputNumber>
+      @if (hasError('prePaymentAmount')) {
+      <small class="text-red-500">{{
+        getErrorMessage("prePaymentAmount")
+      }}</small>
+      }
+    </div>
+    }
+
+    <!-- Restructuring: Description, Tenure, Interest Rate -->
+    @if (loanUpdateForm.get('updateType')?.value === 'Restructuring') {
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="description" class="text-sm font-semibold text-foreground">
+          Restructuring Reason <span class="text-red-500">*</span>
+        </label>
+        <textarea
+          id="description"
+          formControlName="description"
+          pInputTextarea
+          rows="3"
+          placeholder="Explain the reason for restructuring..."
+          class="w-full"
+        ></textarea>
+        @if (hasError('description')) {
+        <small class="text-red-500">{{ getErrorMessage("description") }}</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="totalMonths" class="text-sm font-semibold text-foreground">
+          Additional Tenure (Months) <span class="text-red-500">*</span>
+        </label>
+        <p-inputNumber
+          id="totalMonths"
+          formControlName="totalMonths"
+          [style]="{ width: '100%' }"
+          styleClass="w-full"
+        ></p-inputNumber>
+        @if (hasError('totalMonths')) {
+        <small class="text-red-500">{{ getErrorMessage("totalMonths") }}</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="interestRate" class="text-sm font-semibold text-foreground">
+          New Interest Rate (%) <span class="text-red-500">*</span>
+        </label>
+        <p-inputNumber
+          id="interestRate"
+          formControlName="interestRate"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [style]="{ width: '100%' }"
+          styleClass="w-full"
+        ></p-inputNumber>
+        @if (hasError('interestRate')) {
+        <small class="text-red-500">{{
+          getErrorMessage("interestRate")
+        }}</small>
+        }
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="loanDate" class="text-sm font-semibold text-foreground">
+          New Loan Date <span class="text-red-500">*</span>
+        </label>
+        <p-calendar
+          id="loanDate"
+          formControlName="loanDate"
+          [style]="{ width: '100%' }"
+          [minDate]="minDate"
+          [maxDate]="maxDate"
+          styleClass="w-full"
+        ></p-calendar>
+        @if (hasError('loanDate')) {
+        <small class="text-red-500">{{ getErrorMessage("loanDate") }}</small>
+        }
+      </div>
+
+      <!-- Summary Section -->
+      @if (loanUpdateForm.get('totalMonths')?.value) {
+      <div class="bg-primary/10 p-4 rounded-lg border border-primary/20">
+        <h4 class="text-sm font-semibold text-foreground mb-3">
+          Restructuring Summary
+        </h4>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <span class="text-muted-foreground">Current Tenure:</span>
+            <span class="text-foreground font-semibold ml-2"
+              >{{ loan()?.totalMonths || "0" }} months</span
+            >
+          </div>
+          <div>
+            <span class="text-muted-foreground">Additional Tenure:</span>
+            <span class="text-foreground font-semibold ml-2"
+              >{{
+                loanUpdateForm.get("totalMonths")?.value || "0"
+              }}
+              months</span
+            >
+          </div>
+          <div class="col-span-2 pt-2 border-t border-primary/20">
+            <span class="text-muted-foreground">Total Tenure:</span>
+            <span class="text-primary font-bold ml-2 text-base"
+              >{{ getTotalTenure() || "0" }} months</span
+            >
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Action Buttons -->
+    <div class="flex justify-end gap-3 mt-4">
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        (onClick)="closeDialog('cancel')"
+        [disabled]="isSubmitting"
+      ></p-button>
+      <p-button
+        label="Submit Update"
+        type="submit"
+        [loading]="isSubmitting"
+        [disabled]="loanUpdateForm.invalid"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>

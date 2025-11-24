@@ -62,19 +62,19 @@
     <div class="bg-card border border-secondary rounded-lg p-6">
       <p class="text-secondary-500 mb-2">Total Deposits</p>
       <p class="text-3xl font-bold text-green-400">
-        {{ summary.totalDeposits | currency : "INR" }}
+        {{ summary.data.DEPOSIT | currency : "INR" }}
       </p>
     </div>
     <div class="bg-card border border-secondary rounded-lg p-6">
       <p class="text-secondary-500 mb-2">Total Withdrawals</p>
       <p class="text-3xl font-bold text-red-400">
-        {{ summary.totalWithdrawals | currency : "INR" }}
+        {{ summary.data.WITHDRAW | currency : "INR" }}
       </p>
     </div>
     <div class="bg-card border border-secondary rounded-lg p-6">
       <p class="text-secondary-500 mb-2">Total Transfers</p>
       <p class="text-3xl font-bold text-blue-400">
-        {{ summary.totalTransfers | currency : "INR" }}
+        {{ summary.data.TRANSFER | currency : "INR" }}
       </p>
     </div>
   </section>

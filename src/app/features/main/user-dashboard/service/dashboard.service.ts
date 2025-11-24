@@ -20,7 +20,6 @@ import { HttpParams } from '@angular/common/http';
 export class DashboardService {
   apiService = inject(ApiService);
 
-
   getKPI(
     userId: string
   ): Observable<CommonResponseModel<UserDashboardKpiResponse>> {
@@ -48,7 +47,9 @@ export class DashboardService {
     let params = new HttpParams();
     params = params.append('accountId', userId);
     params = params.append('year', year);
-    return this.apiService.get(`/api/user/dashboard/balance-trends`, { params });
+    return this.apiService.get(`/api/user/dashboard/balance-trends`, {
+      params,
+    });
   }
 
   getRecentTransactionsByUserId(
@@ -61,14 +62,11 @@ export class DashboardService {
     params = params.append('accountId', accountId);
     params = params.append('fromDate', fromDate);
     params = params.append('toDate', toDate);
-    for (const key in paging) {
-      if (
-        paging.hasOwnProperty(key) &&
-        paging[key as keyof Paging] !== undefined
-      ) {
-        params = params.append(key, String(paging[key as keyof Paging]));
+    (Object.keys(paging) as Array<keyof Paging>).forEach((key) => {
+      if (paging[key] !== undefined) {
+        params = params.append(key, String(paging[key]));
       }
-    }
+    });
     return this.apiService.get(`/api/user/dashboard/recent-user-transactions`, {
       params,
     });

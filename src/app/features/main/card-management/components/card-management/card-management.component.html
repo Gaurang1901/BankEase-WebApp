@@ -36,3 +36,10 @@
   [visible]="isRequestCardDialogVisible"
   (visibleChange)="onRequestCardDialogClose($event)"
 ></app-request-card-dialog>
+
+<app-card-transactions-component
+  *ngIf="isRequestCardTransactionDialogVisible"
+  [visible]="isRequestCardTransactionDialogVisible"
+  [cardId]="selectedCardId ?? ''"
+  (visibleChange)="onRequestCardTransactionDialogClose($event)"
+></app-card-transactions-component>

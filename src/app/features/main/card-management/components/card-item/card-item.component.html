@@ -66,6 +66,9 @@
         icon="pi pi-lock"
         label="Block Card"
         (onClick)="onBlock.emit(cardData())"
+        [disabled]="
+          cardData().status === 'EXPIRED' || cardData().status === 'BLOCKED'
+        "
         [size]="'small'"
         styleClass="w-full"
         severity="secondary"
@@ -77,6 +80,7 @@
         label="View Transactions"
         [size]="'small'"
         styleClass="w-full"
+        [disabled]="cardData().status != 'ACTIVE'"
         (onClick)="onViewTransactions.emit(cardData())"
       >
       </p-button>

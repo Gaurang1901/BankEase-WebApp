@@ -1,0 +1,139 @@
+<p-dialog
+  header="Apply for Loan"
+  [visible]="visible()"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="false"
+  [style]="{ width: '50vw', minWidth: '350px' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '95vw' }"
+  (onHide)="closeDialog('cancel')"
+>
+  <form
+    [formGroup]="requestLoanForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-4"
+  >
+    <!-- Loan Type Selection -->
+    <div class="flex flex-col gap-2">
+      <label for="loanType" class="text-sm font-semibold text-foreground">
+        Loan Type <span class="text-red-500">*</span>
+      </label>
+      <p-dropdown
+        id="loanType"
+        formControlName="loanType"
+        [options]="loanTypeOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Select loan type"
+        [style]="{ width: '100%' }"
+        styleClass="w-full"
+      ></p-dropdown>
+      @if (hasError('loanType')) {
+      <small class="text-red-500">{{ getErrorMessage("loanType") }}</small>
+      }
+    </div>
+
+    <!-- Principal Amount -->
+    <div class="flex flex-col gap-2">
+      <label
+        for="principalAmount"
+        class="text-sm font-semibold text-foreground"
+      >
+        Loan Amount <span class="text-red-500">*</span>
+      </label>
+      <p-inputNumber
+        id="principalAmount"
+        formControlName="principalAmount"
+        mode="currency"
+        currency="USD"
+        locale="en-US"
+        [style]="{ width: '100%' }"
+        styleClass="w-full"
+        placeholder="Enter loan amount"
+      ></p-inputNumber>
+      @if (hasError('principalAmount')) {
+      <small class="text-red-500">{{
+        getErrorMessage("principalAmount")
+      }}</small>
+      }
+    </div>
+
+    <!-- Interest Rate (Auto-populated, Disabled) -->
+    <div class="flex flex-col gap-2">
+      <label for="interestRate" class="text-sm font-semibold text-foreground">
+        Interest Rate (% p.a.)
+      </label>
+      <p-inputNumber
+        id="interestRate"
+        formControlName="interestRate"
+        suffix=" %"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+        [style]="{ width: '100%' }"
+        styleClass="w-full"
+        [disabled]="true"
+      ></p-inputNumber>
+      <small class="text-muted-foreground text-xs">
+        Interest rate is automatically set based on loan type
+      </small>
+    </div>
+
+    <!-- Tenure -->
+    <div class="flex flex-col gap-2">
+      <label for="totalMonths" class="text-sm font-semibold text-foreground">
+        Tenure (Months) <span class="text-red-500">*</span>
+      </label>
+      <p-inputNumber
+        id="totalMonths"
+        formControlName="totalMonths"
+        [style]="{ width: '100%' }"
+        styleClass="w-full"
+        placeholder="Enter tenure in months"
+        [min]="1"
+        [max]="360"
+      ></p-inputNumber>
+      @if (hasError('totalMonths')) {
+      <small class="text-red-500">{{ getErrorMessage("totalMonths") }}</small>
+      }
+      <small class="text-muted-foreground text-xs">
+        Maximum tenure: 360 months (30 years)
+      </small>
+    </div>
+
+    <!-- Account Number -->
+    <!-- <div class="flex flex-col gap-2">
+      <label for="accountNumber" class="text-sm font-semibold text-foreground">
+        Repayment Account <span class="text-red-500">*</span>
+      </label>
+      <p-dropdown
+        id="accountNumber"
+        formControlName="accountNumber"
+        [options]="accountOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Select account for EMI deduction"
+        [style]="{ width: '100%' }"
+        styleClass="w-full"
+      ></p-dropdown>
+      @if (hasError('accountNumber')) {
+      <small class="text-red-500">{{ getErrorMessage("accountNumber") }}</small>
+      }
+    </div> -->
+
+    <!-- Action Buttons -->
+    <div class="flex justify-end gap-3 mt-4">
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        (onClick)="closeDialog('cancel')"
+        [disabled]="isSubmitting"
+      ></p-button>
+      <p-button
+        label="Submit Application"
+        type="submit"
+        [loading]="isSubmitting"
+        [disabled]="requestLoanForm.invalid || isLoadingRates"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>

@@ -1,0 +1,93 @@
+<div class="min-h-screen bg-background p-6">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-foreground">Loan Management</h1>
+      <p class="text-muted-foreground mt-1">
+        Apply for loans and manage your existing loans
+      </p>
+    </div>
+    <p-button
+      label="Apply for Loan"
+      icon="pi pi-plus"
+      (onClick)="openApplyLoanDialog()"
+      styleClass="!bg-blue-600 !border-blue-600"
+    ></p-button>
+  </div>
+
+  <!-- My Loans Section -->
+  <div class="mt-8">
+    <h2 class="text-2xl font-semibold text-foreground mb-2">My Loans</h2>
+    <p class="text-muted-foreground mb-6">
+      Your active and pending loan applications
+    </p>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (i of [1, 2, 3]; track i) {
+      <div
+        class="h-64 bg-card border border-secondary rounded-xl animate-pulse"
+      ></div>
+      }
+    </div>
+    }
+
+    <!-- Loans Grid -->
+    @if (!isLoading() && loans().length > 0) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (loan of loans(); track loan.id) {
+      <app-loan-item
+        [loan]="loan"
+        (onUpdate)="handleUpdateLoan($event)"
+      ></app-loan-item>
+      }
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages() > 1) {
+    <div class="mt-8 flex justify-center">
+      <p-paginator
+        [rows]="pageSize()"
+        [totalRecords]="totalElements()"
+        [first]="currentPage() * pageSize()"
+        (onPageChange)="onPageChange($event)"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} loans"
+      ></p-paginator>
+    </div>
+    } }
+
+    <!-- Empty State -->
+    @if (!isLoading() && loans().length === 0) {
+    <div class="flex flex-col items-center justify-center py-16 text-center">
+      <i class="pi pi-inbox text-6xl text-muted-foreground mb-4"></i>
+      <h3 class="text-xl font-semibold text-foreground mb-2">No Loans Found</h3>
+      <p class="text-muted-foreground mb-6">
+        You don't have any active or pending loan applications.
+      </p>
+      <p-button
+        label="Apply for a Loan"
+        icon="pi pi-plus"
+        (onClick)="openApplyLoanDialog()"
+      ></p-button>
+    </div>
+    }
+  </div>
+
+  <!-- Toast Messages -->
+  <p-toast key="custom-toast"></p-toast>
+
+  <!-- Update Loan Dialog -->
+  <app-update-loan-dialog
+    [visible]="isUpdateLoanDialogVisible"
+    [loan]="selectedLoan"
+    (visibleChange)="onUpdateLoanDialogClose($event)"
+  ></app-update-loan-dialog>
+
+  <!-- Request Loan Dialog -->
+  <app-request-loan-dialog
+    [visible]="isRequestLoanDialogVisible"
+    (visibleChange)="onRequestLoanDialogClose($event)"
+  ></app-request-loan-dialog>
+</div>

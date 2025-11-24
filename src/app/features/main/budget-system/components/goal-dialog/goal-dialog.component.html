@@ -1,0 +1,120 @@
+<p-dialog
+  [(visible)]="visible"
+  [style]="{ width: '500px' }"
+  [header]="editMode ? 'Edit Goal' : 'New Goal'"
+  [modal]="true"
+  styleClass="p-fluid"
+  (onHide)="onHide()"
+>
+  <ng-template pTemplate="content">
+    <form [formGroup]="goalForm" class="flex flex-col gap-4 mt-4">
+      <!-- Name -->
+      <div class="field">
+        <label for="name" class="block text-sm font-medium text-gray-700 mb-1"
+          >Goal Name</label
+        >
+        <input
+          pInputText
+          id="name"
+          formControlName="name"
+          placeholder="e.g. Emergency Fund"
+        />
+        <small *ngIf="isFieldInvalid('name')" class="text-red-500"
+          >Name is required.</small
+        >
+      </div>
+
+      <!-- Target Amount -->
+      <div class="field">
+        <label
+          for="targetAmount"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Target Amount</label
+        >
+        <p-inputNumber
+          id="targetAmount"
+          formControlName="targetAmount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          placeholder="0.00"
+        ></p-inputNumber>
+        <small *ngIf="isFieldInvalid('targetAmount')" class="text-red-500"
+          >Target amount is required.</small
+        >
+      </div>
+
+      <!-- Deadline -->
+      <div class="field">
+        <label
+          for="deadline"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Deadline</label
+        >
+        <p-calendar
+          id="deadline"
+          formControlName="deadline"
+          dateFormat="yy-mm-dd"
+          [minDate]="minDate"
+          placeholder="Select Date"
+          [appendTo]="'body'"
+        ></p-calendar>
+        <small *ngIf="isFieldInvalid('deadline')" class="text-red-500"
+          >Deadline is required.</small
+        >
+      </div>
+
+      <!-- Auto Deduct -->
+      <div class="field-checkbox flex items-center gap-2">
+        <p-checkbox
+          id="autoDeductEnabled"
+          formControlName="autoDeductEnabled"
+          [binary]="true"
+        ></p-checkbox>
+        <label for="autoDeductEnabled" class="text-sm font-medium text-gray-700"
+          >Enable Auto Deduction</label
+        >
+      </div>
+
+      <!-- Auto Deduct Amount -->
+      <div class="field" *ngIf="goalForm.get('autoDeductEnabled')?.value">
+        <label
+          for="autoDeductAmount"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Monthly Deduction Amount</label
+        >
+        <p-inputNumber
+          id="autoDeductAmount"
+          formControlName="autoDeductAmount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          placeholder="0.00"
+        ></p-inputNumber>
+        <small *ngIf="isFieldInvalid('autoDeductAmount')" class="text-red-500"
+          >Deduction amount is required when enabled.</small
+        >
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="onHide()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="onSubmit()"
+      [disabled]="goalForm.invalid"
+    ></button>
+  </ng-template>
+</p-dialog>

@@ -2,8 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { CardModel, CardResponseModel } from '../models/card.model';
 import { ApiService } from '../../../../core/auth/services/api.service';
-import { HttpHeaders } from '@angular/common/http';
-import { CommonResponseModel } from '../../../../core/types/helper.model';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  CommonResponseModel,
+  Paging,
+} from '../../../../core/types/helper.model';
 
 @Injectable({
   providedIn: 'root',
@@ -47,8 +50,7 @@ export class CardService {
     cardId: string,
     userId: string
   ): Observable<CommonResponseModel<any>> {
-    let headers = new HttpHeaders();
-    headers.append('X-User-ID', userId);
+    const headers = new HttpHeaders().append('X-User-ID', userId);
     return this.apiService.post(`/api/cards/${cardId}/block`, {}, { headers });
   }
 
@@ -57,12 +59,24 @@ export class CardService {
     accountId: string,
     userId: string
   ): Observable<CommonResponseModel<any>> {
-    let headers = new HttpHeaders();
-    headers.append('X-User-ID', userId);
+    const headers = new HttpHeaders().append('X-User-ID', userId);
     return this.apiService.post(
       `/api/accounts/${accountId}/cards/request`,
       cardPayload,
-      { headers }
+      { headers: headers }
     );
+  }
+
+  getCardTransactions(
+    data: Paging,
+    cardId: string
+  ): Observable<CommonResponseModel<any>> {
+    let params = new HttpParams();
+    (Object.keys(data) as Array<keyof Paging>).forEach((key) => {
+      if (data[key] !== undefined) {
+        params = params.append(key, String(data[key]));
+      }
+    });
+    return this.apiService.get(`/api/cards/${cardId}/transactions`, { params });
   }
 }

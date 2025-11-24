@@ -16,6 +16,8 @@ import { TransactionService } from '../../service/transaction.service';
 import { PageHeaderService } from '../../../../../core/services/page-header.service';
 import { AuthService } from '../../../../../core/auth/services/auth.service';
 import { TransactionTableComponent } from '../transaction-table/transaction-table.component';
+import { CommonResponseModel } from '../../../../../core/types/helper.model';
+import { User } from '../../../../../core/auth/store/auth.state';
 
 @Component({
   selector: 'app-transactions-page',
@@ -37,8 +39,9 @@ export class TransactionsPageComponent implements OnInit {
   private messageService = inject(MessageService);
   private pageHeaderService = inject(PageHeaderService);
 
-  summary$!: Observable<TransactionSummary>;
+  summary$!: Observable<CommonResponseModel<TransactionSummary>>;
   private accountId!: string;
+  user: User | null = null;
 
   isDialogVisible = false;
   currentTransactionType!: TransactionType;
@@ -50,8 +53,9 @@ export class TransactionsPageComponent implements OnInit {
     this.authService.getUserProfile().subscribe((user) => {
       if (user) {
         this.accountId = user.userId!;
+        this.user = user;
         this.summary$ = this.transactionService.getTransactionSummary(
-          this.accountId
+          this.user?.accountId!
         );
       }
     });

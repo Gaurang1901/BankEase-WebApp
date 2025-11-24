@@ -6,6 +6,8 @@ import { ConfigService } from './config.service';
 import { jwtDecode } from 'jwt-decode';
 import { LocalStorageService } from './local-storage.service';
 import { LoginCredentials } from '../models/login.model';
+import { AuthStore } from '../store/auth.store';
+import { Router } from '@angular/router';
 
 const TOKEN_KEY = 'auth_token';
 
@@ -23,6 +25,7 @@ export class AuthService {
   http = inject(HttpClient);
   hostUrl = inject(ConfigService).getAPIUrl();
   localStorageService = inject(LocalStorageService);
+  router = inject(Router);
   getToken(): string | null {
     return this.localStorageService.getItem(TOKEN_KEY) as string | null;
   }
@@ -74,11 +77,13 @@ export class AuthService {
 
   logout(): void {
     this.removeToken();
+    this.router.navigate(['/login']);
   }
 
   getUserProfile(): Observable<User> {
     const token = this.getToken();
     if (!token) {
+      this.logout();
       return throwError(() => new Error('No token found'));
     }
     if (token) {

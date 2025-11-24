@@ -64,3 +64,22 @@ export const BUDGET_CATEGORY = {
     value: 'OTHERS',
   },
 };
+
+export const REVENUE_PERIOD_TYPE = {
+  YEARLY: {
+    label: 'Yearly',
+    value: 'YEARLY',
+  },
+  HALF_YEARLY: {
+    label: 'Half Yearly',
+    value: 'HALF_YEARLY',
+  },
+  QUARTERLY: {
+    label: 'Quarterly',
+    value: 'QUARTERLY',
+  },
+  MONTHLY: {
+    label: 'Monthly',
+    value: 'MONTHLY',
+  },
+};

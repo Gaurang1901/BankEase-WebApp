@@ -1,0 +1,90 @@
+<p-dialog
+  [(visible)]="visible"
+  [style]="{ width: '450px' }"
+  [header]="editMode ? 'Edit Budget' : 'New Budget'"
+  [modal]="true"
+  styleClass="p-fluid"
+  (onHide)="onHide()"
+>
+  <ng-template pTemplate="content">
+    <form [formGroup]="budgetForm" class="flex flex-col gap-4 mt-4">
+      <!-- Category -->
+      <div class="field">
+        <label
+          for="category"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Category</label
+        >
+        <p-dropdown
+          id="category"
+          [options]="categories"
+          formControlName="category"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select a Category"
+          [appendTo]="'body'"
+        ></p-dropdown>
+        <small *ngIf="isFieldInvalid('category')" class="text-red-500"
+          >Category is required.</small
+        >
+      </div>
+
+      <!-- Amount -->
+      <div class="field">
+        <label for="amount" class="block text-sm font-medium text-gray-700 mb-1"
+          >Amount</label
+        >
+        <p-inputNumber
+          id="amount"
+          formControlName="amount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          placeholder="0.00"
+        ></p-inputNumber>
+        <small *ngIf="isFieldInvalid('amount')" class="text-red-500"
+          >Amount is required and must be positive.</small
+        >
+      </div>
+
+      <!-- Period -->
+      <div class="field">
+        <label for="period" class="block text-sm font-medium text-gray-700 mb-1"
+          >Period</label
+        >
+        <p-dropdown
+          id="period"
+          [options]="periods"
+          formControlName="period"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select Period"
+          [appendTo]="'body'"
+        ></p-dropdown>
+        <small *ngIf="isFieldInvalid('period')" class="text-red-500"
+          >Period is required.</small
+        >
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="onHide()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="onSubmit()"
+      [disabled]="budgetForm.invalid"
+    ></button>
+  </ng-template>
+</p-dialog>

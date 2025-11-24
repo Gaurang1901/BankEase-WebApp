@@ -1,0 +1,85 @@
+<div class="flex flex-col gap-4 p-6 rounded-xl bg-card border border-secondary">
+  <!-- Header with Loan Type and Status -->
+  <div class="flex justify-between items-start">
+    <div>
+      <h3 class="text-xl font-semibold text-foreground">
+        {{ loan().loanType }} Loan
+      </h3>
+      <p class="text-sm text-muted-foreground mt-1">
+        Account: {{ loan().loanNumber }}
+      </p>
+    </div>
+    <p-tag
+      [value]="loan().loanStatus"
+      [severity]="getStatusSeverity()"
+      [styleClass]="getStatusClass() + ' uppercase text-xs font-bold px-3'"
+    ></p-tag>
+  </div>
+
+  <!-- Loan Details Grid -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
+    <!-- Loan Amount -->
+    <div class="flex flex-col">
+      <span class="text-sm text-muted-foreground">Loan Amount</span>
+      <span class="text-lg font-bold text-foreground mt-1">{{
+        loan().principalAmount | currency : "INR"
+      }}</span>
+    </div>
+
+    <!-- Interest Rate -->
+    <div class="flex flex-col">
+      <span class="text-sm text-muted-foreground">Interest Rate</span>
+      <span class="text-lg font-bold text-foreground mt-1"
+        >{{ loan().interestRate }}% p.a.</span
+      >
+    </div>
+
+    <!-- Tenure -->
+    <div class="flex flex-col">
+      <span class="text-sm text-muted-foreground">Tenure</span>
+      <span class="text-lg font-bold text-foreground mt-1"
+        >{{ loan().totalMonths }} months</span
+      >
+    </div>
+
+    <!-- Monthly EMI -->
+    <div class="flex flex-col">
+      <span class="text-sm text-muted-foreground">Monthly EMI</span>
+      <span class="text-lg font-bold text-foreground mt-1">{{
+        loan().emiAmount | currency : "INR"
+      }}</span>
+    </div>
+  </div>
+
+  <!-- Dates -->
+  <div class="flex justify-between items-center mt-2 text-sm">
+    <div class="flex gap-6">
+      <div>
+        <span class="text-muted-foreground">Applied On</span>
+        <span class="text-foreground font-medium ml-2">{{
+          formatDate(loan().applicationDate)
+        }}</span>
+      </div>
+      @if (loan().approvedDate) {
+      <div>
+        <span class="text-muted-foreground">Approved On</span>
+        <span class="text-foreground font-medium ml-2">{{
+          formatDate(loan().approvedDate)
+        }}</span>
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- Update Button -->
+  <div class="mt-2">
+    <p-button
+      label="Update Loan"
+      icon="pi pi-pencil"
+      [disabled]="isUpdateDisabled()"
+      (onClick)="handleUpdate()"
+      styleClass="w-full"
+      [size]="'small'"
+    ></p-button>
+  </div>
+</div>

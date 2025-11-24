@@ -19,6 +19,9 @@ import { FormHelper } from '../../../../../core/utils/form.helper';
 import { MessageService } from 'primeng/api';
 import { Select, SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
+import { CardService } from '../../service/card.service';
+import { AuthService } from '../../../../../core/auth/services/auth.service';
+import { User } from '../../../../../core/auth/store/auth.state';
 
 @Component({
   selector: 'app-request-card-dialog',
@@ -43,11 +46,18 @@ export class RequestCardDialogComponent {
   }>();
   requestCardForm!: FormGroup;
   cardTypes: string[] = ['CREDIT', 'DEBIT'];
+  user: User | null = null;
 
   formHelper = inject(FormHelper);
   messageService = inject(MessageService);
+  cardService = inject(CardService);
+  authService = inject(AuthService);
 
-  constructor() {}
+  constructor() {
+    this.authService.getUserProfile().subscribe((user) => {
+      this.user = user;
+    });
+  }
 
   ngOnInit() {
     this.initializeForm();
@@ -55,7 +65,7 @@ export class RequestCardDialogComponent {
 
   initializeForm() {
     this.requestCardForm = new FormGroup({
-      cardHolderName: new FormControl('', [
+      cardHolderName: new FormControl(this.user?.name || '', [
         Validators.required,
         Validators.minLength(2),
       ]),
@@ -74,9 +84,33 @@ export class RequestCardDialogComponent {
 
   onRequestCard() {
     this.isSubmitting = true;
-    this.visibleChange.emit({
-      visible: false,
-      type: 'submit',
-    });
+
+    this.cardService
+      .requestCard(
+        this.requestCardForm.value,
+        this.user?.accountId!,
+        this.user?.userId!
+      )
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Card requested successfully',
+          });
+          this.visibleChange.emit({
+            visible: false,
+            type: 'submit',
+          });
+        },
+        error: (error) => {
+          this.close();
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message,
+          });
+        },
+      });
   }
 }
