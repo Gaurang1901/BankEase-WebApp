@@ -1,0 +1,47 @@
+<p-dialog
+  header="Download Statement"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="onHide()"
+>
+  <div class="flex flex-col gap-4 py-4">
+    <p class="text-secondary-400">
+      Select a date range to download your account statement.
+    </p>
+
+    <div class="flex flex-col gap-2">
+      <label for="dateRange" class="font-medium">Date Range</label>
+      <p-datepicker
+        inputId="dateRange"
+        [formControl]="dateRangeControl"
+        selectionMode="range"
+        [readonlyInput]="true"
+        placeholder="Select Date Range"
+        appendTo="body"
+        [showIcon]="true"
+        dateFormat="dd/mm/yy"
+        [maxDate]="maxDate"
+      ></p-datepicker>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        (click)="onHide()"
+        styleClass="p-button-text"
+      ></p-button>
+      <p-button
+        label="Download"
+        icon="pi pi-download"
+        (click)="onDownload()"
+        [disabled]="isDownloadDisabled"
+      ></p-button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,241 @@
+<div
+  class="m-4 p-6 rounded-2xl bg-card border border-secondary-200 dark:border-secondary-800"
+>
+  <!-- <div class="mb-6">
+    <h1 class="text-2xl font-bold mb-2">User Management</h1>
+    <p class="dark:text-secondary-400 text-secondary-600">
+      View and manage all registered users
+    </p>
+  </div> -->
+
+  <!-- KPIs excluded as per request -->
+
+  <div class="rounded-lg p-4">
+    <div class="flex justify-between items-center mb-4">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">User List</h2>
+        <p class="dark:text-secondary-400 text-secondary-600 text-sm">
+          All registered users in the system
+        </p>
+      </div>
+      <p-button
+        label="Add Admin Users"
+        icon="pi pi-plus"
+        styleClass="p-button-outlined"
+        (onClick)="showDialog()"
+      ></p-button>
+    </div>
+
+    <p-tabView
+      [(activeIndex)]="activeIndex"
+      (onChange)="onTabChange($event)"
+      styleClass="custom-tabview"
+    >
+      <p-tabPanel header="Users">
+        <ng-container *ngIf="activeIndex === 0">
+          <app-table
+            [columns]="userColumns"
+            [getDataFunc]="getUsers"
+            [paginationPageSize]="10"
+            [componentInstance]="this"
+          >
+          </app-table>
+        </ng-container>
+      </p-tabPanel>
+      <p-tabPanel header="Admin Users">
+        <ng-container *ngIf="activeIndex === 1">
+          <app-table
+            [columns]="adminColumns"
+            [getDataFunc]="getAdminUsers"
+            [paginationPageSize]="10"
+            [componentInstance]="this"
+          >
+          </app-table>
+        </ng-container>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+</div>
+
+<p-dialog
+  header="Add Admin User"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <form
+    [formGroup]="adminForm"
+    (ngSubmit)="onSubmit()"
+    class="p-fluid grid grid-cols-2 gap-4"
+  >
+    <div class="field col-span-1">
+      <app-input-group
+        id="name"
+        label="Name"
+        [formObj]="getControl('name')"
+        [errorMessages]="errorMessages"
+        [isRequired]="true"
+      >
+        <input id="name" type="text" pInputText formControlName="name" />
+      </app-input-group>
+    </div>
+    <div class="field col-span-1">
+      <app-input-group
+        id="email"
+        label="Email"
+        [formObj]="getControl('email')"
+        [errorMessages]="errorMessages"
+        [isRequired]="true"
+      >
+        <input id="email" type="email" pInputText formControlName="email" />
+      </app-input-group>
+    </div>
+    <div class="field col-span-1">
+      <app-input-group
+        id="phoneNo"
+        label="Phone No"
+        [formObj]="getControl('phoneNo')"
+        [errorMessages]="errorMessages"
+        [isRequired]="true"
+      >
+        <input id="phoneNo" type="text" pInputText formControlName="phoneNo" />
+      </app-input-group>
+    </div>
+    <div class="field col-span-1">
+      <app-input-group
+        id="password"
+        label="Password"
+        [formObj]="getControl('password')"
+        [errorMessages]="errorMessages"
+        [isRequired]="true"
+      >
+        <p-password
+          id="password"
+          formControlName="password"
+          [toggleMask]="true"
+          [feedback]="true"
+        ></p-password>
+      </app-input-group>
+    </div>
+    <div class="field col-span-1">
+      <app-input-group
+        id="dateOfBirth"
+        label="Date of Birth"
+        [formObj]="getControl('dateOfBirth')"
+        [errorMessages]="errorMessages"
+        [isRequired]="true"
+      >
+        <p-calendar
+          id="dateOfBirth"
+          formControlName="dateOfBirth"
+          dateFormat="yy-mm-dd"
+          [showIcon]="true"
+        ></p-calendar>
+      </app-input-group>
+    </div>
+
+    <div
+      formGroupName="address"
+      class="col-span-2 grid grid-cols-2 gap-4 border-t border-gray-700 pt-4 mt-2"
+    >
+      <div class="col-span-2">
+        <h3 class="font-semibold mb-2">Address</h3>
+      </div>
+      <div class="field col-span-2">
+        <app-input-group
+          id="addressLine1"
+          label="Address Line 1"
+          [formObj]="getAddressControl('addressLine1')"
+          [errorMessages]="errorMessages"
+          [isRequired]="true"
+        >
+          <input
+            id="addressLine1"
+            type="text"
+            pInputText
+            formControlName="addressLine1"
+          />
+        </app-input-group>
+      </div>
+      <div class="field col-span-2">
+        <app-input-group
+          id="addressLine2"
+          label="Address Line 2"
+          [formObj]="getAddressControl('addressLine2')"
+          [errorMessages]="errorMessages"
+        >
+          <input
+            id="addressLine2"
+            type="text"
+            pInputText
+            formControlName="addressLine2"
+          />
+        </app-input-group>
+      </div>
+      <div class="field col-span-1">
+        <app-input-group
+          id="city"
+          label="City"
+          [formObj]="getAddressControl('city')"
+          [errorMessages]="errorMessages"
+          [isRequired]="true"
+        >
+          <input id="city" type="text" pInputText formControlName="city" />
+        </app-input-group>
+      </div>
+      <div class="field col-span-1">
+        <app-input-group
+          id="stateId"
+          label="State"
+          [formObj]="getAddressControl('stateId')"
+          [errorMessages]="errorMessages"
+          [isRequired]="true"
+        >
+          <p-dropdown
+            id="stateId"
+            [options]="states"
+            optionLabel="name"
+            optionValue="id"
+            formControlName="stateId"
+            placeholder="Select a State"
+            [filter]="true"
+            filterBy="name"
+          ></p-dropdown>
+        </app-input-group>
+      </div>
+      <div class="field col-span-1">
+        <app-input-group
+          id="pinCode"
+          label="Pin Code"
+          [formObj]="getAddressControl('pinCode')"
+          [errorMessages]="errorMessages"
+          [isRequired]="true"
+        >
+          <input
+            id="pinCode"
+            type="text"
+            pInputText
+            formControlName="pinCode"
+          />
+        </app-input-group>
+      </div>
+    </div>
+
+    <div class="col-span-2 flex justify-end mt-4">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        styleClass="p-button-text mr-2"
+        (onClick)="visible = false"
+      ></p-button>
+      <p-button
+        label="Save"
+        icon="pi pi-check"
+        type="submit"
+        [disabled]="adminForm.invalid"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>

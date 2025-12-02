@@ -7,7 +7,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     label: 'Dashboard',
   },
   {
-    routeLink: 'users',
+    routeLink: '/admin/users',
     icon: 'pi pi-users',
     label: 'Users',
     permission: {
@@ -16,7 +16,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     },
   },
   {
-    routeLink: 'accounts',
+    routeLink: '/admin/accounts',
     icon: 'pi pi-wallet',
     label: 'Accounts',
     permission: {
@@ -25,7 +25,7 @@ export const sideBarItems: MasterSidebarItem[] = [
     },
   },
   {
-    routeLink: 'transactions',
+    routeLink: '/admin/transactions',
     icon: 'pi pi-arrow-right-arrow-left',
     label: 'Transactions',
     permission: {
@@ -44,12 +44,32 @@ export const sideBarItems: MasterSidebarItem[] = [
       {
         icon: 'pi pi-check-circle',
         label: 'Pending Approvals',
-        routeLink: 'loan-pending-list ',
+        routeLink: '/admin/loan-pending-list',
       },
       {
         icon: 'pi pi-dollar',
         label: 'Loan List',
-        routeLink: 'loans',
+        routeLink: '/admin/loans',
+      },
+    ],
+  },
+  {
+    icon: 'pi pi-credit-card',
+    label: 'Cards',
+    permission: {
+      resource: 'cardModule',
+      action: 'view',
+    },
+    children: [
+      {
+        icon: 'pi pi-check-circle',
+        label: 'Pending Approvals',
+        routeLink: '/admin/cards-pending-list ',
+      },
+      {
+        icon: 'pi pi-credit-card',
+        label: 'Card List',
+        routeLink: '/admin/cards',
       },
     ],
   },
@@ -133,15 +153,6 @@ export const sideBarItems: MasterSidebarItem[] = [
     label: 'Budgets',
     permission: {
       resource: 'budgetModule',
-      action: 'view',
-    },
-  },
-  {
-    routeLink: 'user/statements',
-    icon: 'pi pi-file',
-    label: 'Statements',
-    permission: {
-      resource: 'statementModule',
       action: 'view',
     },
   },

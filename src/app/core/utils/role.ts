@@ -23,6 +23,10 @@ export type Permissions = {
     dataType: any;
     action: 'create' | 'view' | 'edit' | 'delete';
   };
+  cardModule: {
+    dataType: any;
+    action: 'create' | 'view' | 'edit' | 'delete';
+  };
   myAccountModule: {
     dataType: any;
     action: 'view' | 'edit';
@@ -108,6 +112,12 @@ const ROLES = {
       edit: true,
       delete: true,
     },
+    cardModule: {
+      create: true,
+      view: true,
+      edit: true,
+      delete: true,
+    },
   },
 
   ROLE_SUPER_ADMIN: {
@@ -136,6 +146,12 @@ const ROLES = {
       delete: true,
     },
     loanModule: {
+      create: true,
+      view: true,
+      edit: true,
+      delete: true,
+    },
+    cardModule: {
       create: true,
       view: true,
       edit: true,

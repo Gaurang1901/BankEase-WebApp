@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
@@ -7,6 +8,7 @@ import {
   CloseAccountPayload,
 } from '../models/account.model';
 import { ApiService } from '../../../../core/auth/services/api.service';
+import { ConfigService } from '../../../../core/auth/services/config.service';
 import { CommonResponseModel } from '../../../../core/types/helper.model';
 
 @Injectable({
@@ -14,6 +16,10 @@ import { CommonResponseModel } from '../../../../core/types/helper.model';
 })
 export class AccountService {
   private apiService = inject(ApiService);
+  private http = inject(HttpClient);
+  private configService = inject(ConfigService);
+  private baseUrl = this.configService.getAPIUrl();
+
   getAccountOverview(
     accountId: string
   ): Observable<CommonResponseModel<AccountSummary>> {
@@ -84,5 +90,11 @@ export class AccountService {
     // console.log(`Closing account ${accountId} with payload:`, payload);
     // // Simulate a successful API call
     // return of({ success: true }).pipe(delay(1000));
+  }
+
+  downloadStatement(payload: any): Observable<Blob> {
+    return this.http.post(`${this.baseUrl}/api/statements/custom`, payload, {
+      responseType: 'blob',
+    });
   }
 }

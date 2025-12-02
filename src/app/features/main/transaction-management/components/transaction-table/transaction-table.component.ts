@@ -1,7 +1,9 @@
 import {
   AfterViewInit,
   Component,
+  Input,
   OnInit,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
   inject,
@@ -28,6 +30,7 @@ import { AuthService } from '../../../../../core/auth/services/auth.service';
 export class TransactionTableComponent implements OnInit, AfterViewInit {
   @ViewChild('transactionTypeFilter', { static: true })
   transactionTypeFilter!: TemplateRef<any>;
+  @Input() refreshTable!: boolean;
 
   columns: Column[] = [];
   totalItems = 0;
@@ -41,6 +44,14 @@ export class TransactionTableComponent implements OnInit, AfterViewInit {
   api: ApiService = inject(ApiService);
   authService: AuthService = inject(AuthService);
   private _tableService: CustomTableService = inject(CustomTableService);
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['refreshTable'].currentValue) {
+      this._tableService.setrefreshTable(true);
+      this.refreshTable = false;
+      this._tableService.setrefreshTable(false);
+    }
+  }
 
   ngOnInit(): void {
     // initial column setup without the custom filter template assigned yet

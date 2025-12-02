@@ -1,0 +1,9 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Loan List</h2>
+  <app-table
+    [columns]="columns"
+    [getDataFunc]="getLoans"
+    [componentInstance]="this"
+    [paginationPageSize]="paging.size"
+  ></app-table>
+</div>

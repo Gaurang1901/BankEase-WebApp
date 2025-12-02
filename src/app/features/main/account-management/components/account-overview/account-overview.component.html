@@ -19,6 +19,13 @@
           styleClass="!border-2 !border-secondary-400"
         ></p-button> -->
         <p-button
+          label="Download Statement"
+          icon="pi pi-download"
+          size="small"
+          outlined="true"
+          (click)="showStatementDialog()"
+        ></p-button>
+        <p-button
           label="Close Account"
           icon="pi pi-times"
           severity="danger"
@@ -104,5 +111,10 @@
       (formSubmit)="handleAccountClose($event, account.data.accountNumber)"
     >
     </app-close-account-dialog>
+
+    <app-statement-download-dialog
+      [(visible)]="isStatementDialogVisible"
+      (download)="handleStatementDownload($event, account.data.accountNumber)"
+    ></app-statement-download-dialog>
   </ng-container>
 </div>

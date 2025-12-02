@@ -85,7 +85,9 @@
     <span>
       <p class="text-secondary-500 mb-2">Transactions List</p>
     </span>
-    <app-transaction-table></app-transaction-table>
+    <app-transaction-table
+      [refreshTable]="refreshTable"
+    ></app-transaction-table>
   </div>
 </div>
 

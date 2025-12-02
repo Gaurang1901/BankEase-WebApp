@@ -42,6 +42,7 @@ export class TransactionsPageComponent implements OnInit {
   summary$!: Observable<CommonResponseModel<TransactionSummary>>;
   private accountId!: string;
   user: User | null = null;
+  refreshTable: boolean = false;
 
   isDialogVisible = false;
   currentTransactionType!: TransactionType;
@@ -72,7 +73,7 @@ export class TransactionsPageComponent implements OnInit {
     const { payload, idempotencyKey } = event;
 
     this.transactionService
-      .executeTransaction(this.accountId, idempotencyKey, payload)
+      .executeTransaction(this.user?.userId!, idempotencyKey, payload)
       .subscribe({
         next: () => {
           this.messageService.add({
@@ -81,10 +82,13 @@ export class TransactionsPageComponent implements OnInit {
             detail: `${this.currentTransactionType} completed successfully!`,
           });
           // Refresh summary data after a successful transaction
+          document.location.reload();
           this.summary$ = this.transactionService.getTransactionSummary(
-            this.accountId
+            this.user?.accountId!
           );
+          this.refreshTable = !this.refreshTable;
           this.isDialogVisible = false;
+          this.refreshTable = !this.refreshTable;
         },
         error: (err) => {
           this.messageService.add({

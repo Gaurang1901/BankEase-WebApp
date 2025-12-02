@@ -74,10 +74,10 @@ export class AllRecentTransactionTableComponent {
         field: 'createdAt',
         header: 'Date',
         cellRenderer: (data: any) => {
-          if (!data.transactionDate) {
+          if (!data.createdAt) {
             return '';
           }
-          const date = new Date(data.transactionDate);
+          const date = new Date(data.createdAt);
           return date.toLocaleDateString();
         },
       },

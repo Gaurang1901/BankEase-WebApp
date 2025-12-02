@@ -1,0 +1,108 @@
+<div
+  class="m-4 p-6 rounded-2xl bg-card border border-secondary-200 dark:border-secondary-800"
+>
+  <div class="rounded-lg p-4">
+    <div class="flex justify-between items-center mb-4">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">Account List</h2>
+        <p class="dark:text-secondary-400 text-secondary-600 text-sm">
+          All customer accounts in the system
+        </p>
+      </div>
+    </div>
+
+    <app-table
+      [columns]="accountColumns"
+      [getDataFunc]="getAccounts"
+      [paginationPageSize]="10"
+      [componentInstance]="this"
+    >
+    </app-table>
+  </div>
+</div>
+
+<ng-template #actionTemplate let-account>
+  <div class="flex gap-2">
+    <button
+      pButton
+      icon="pi pi-pencil"
+      class="p-button-text p-button-sm"
+      (click)="openStatusDialog(account)"
+      pTooltip="Update Status"
+    ></button>
+    <button
+      pButton
+      icon="pi pi-download"
+      class="p-button-text p-button-sm"
+      (click)="openStatementDialog(account)"
+      pTooltip="Download Statement"
+    ></button>
+  </div>
+</ng-template>
+
+<app-statement-download-dialog
+  [(visible)]="isStatementDialogVisible"
+  (download)="handleStatementDownload($event, selectedAccount?.id)"
+></app-statement-download-dialog>
+
+<p-dialog
+  header="Update Account Status"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '40vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <form
+    [formGroup]="statusForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-4"
+  >
+    <app-input-group
+      id="status"
+      label="Status"
+      [formObj]="getControl('status')"
+      [errorMessages]="errorMessages"
+      [isRequired]="true"
+    >
+      <p-dropdown
+        id="status"
+        [options]="statusOptions"
+        formControlName="status"
+        placeholder="Select Status"
+        [style]="{ width: '100%' }"
+      ></p-dropdown>
+    </app-input-group>
+
+    <app-input-group
+      id="reason"
+      label="Reason"
+      [formObj]="getControl('reason')"
+      [errorMessages]="errorMessages"
+      [isRequired]="true"
+    >
+      <textarea
+        id="reason"
+        pInputTextarea
+        formControlName="reason"
+        rows="5"
+        class="w-full"
+      ></textarea>
+    </app-input-group>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        styleClass="p-button-text"
+        (onClick)="visible = false"
+      ></p-button>
+      <p-button
+        label="Update"
+        icon="pi pi-check"
+        type="submit"
+        [disabled]="statusForm.invalid"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>

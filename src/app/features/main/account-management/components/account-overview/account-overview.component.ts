@@ -21,6 +21,7 @@ import {
 import { AccountService } from '../../service/account.service';
 import { PageHeaderService } from '../../../../../core/services/page-header.service';
 import { CloseAccountDialogComponent } from '../close-account-dialog/close-account-dialog.component';
+import { StatementDownloadDialogComponent } from '../statement-download-dialog/statement-download-dialog.component';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../../../../core/auth/services/auth.service';
 import { CommonResponseModel } from '../../../../../core/types/helper.model';
@@ -35,6 +36,7 @@ import { CommonResponseModel } from '../../../../../core/types/helper.model';
     LinkedCardsComponent,
     ActiveLoansComponent,
     CloseAccountDialogComponent,
+    StatementDownloadDialogComponent,
   ],
   providers: [DatePipe, CurrencyPipe],
   templateUrl: './account-overview.component.html',
@@ -49,6 +51,7 @@ export class AccountOverviewComponent {
   private authService = inject(AuthService);
 
   isCloseDialogVisible = false;
+  isStatementDialogVisible = false;
   account$!: Observable<CommonResponseModel<AccountSummary> | null>;
   accountDetailsItems$!: Observable<DetailListItem[]>;
   accountHolderItems$!: Observable<DetailListItem[]>;
@@ -132,5 +135,57 @@ export class AccountOverviewComponent {
         this.isCloseDialogVisible = false; // Keep dialog open or close it based on UX preference
       },
     });
+  }
+
+  showStatementDialog(): void {
+    this.isStatementDialogVisible = true;
+  }
+
+  handleStatementDownload(
+    event: { startDate: Date; endDate: Date },
+    accountId: string
+  ): void {
+    this.authService
+      .getUserProfile()
+      .pipe(take(1))
+      .subscribe((user) => {
+        if (user) {
+          const payload = {
+            accountId: user.accountId,
+            startDate: event.startDate.toISOString(),
+            endDate: event.endDate.toISOString(),
+            userId: user.userId,
+          };
+
+          this.accountService.downloadStatement(payload).subscribe({
+            next: (blob) => {
+              const url = window.URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              const filename = `Custom-${event.startDate
+                .toISOString()
+                .slice(0, 10)}_to_${event.endDate
+                .toISOString()
+                .slice(0, 10)}.pdf`;
+              link.download = filename;
+              link.click();
+              window.URL.revokeObjectURL(url);
+              this.messageService.add({
+                key: 'custom-toast',
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Statement downloaded successfully',
+              });
+            },
+            error: () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Failed to download statement',
+              });
+            },
+          });
+        }
+      });
   }
 }

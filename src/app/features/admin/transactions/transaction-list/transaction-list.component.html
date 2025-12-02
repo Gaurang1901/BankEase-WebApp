@@ -1,0 +1,134 @@
+<div
+  class="m-4 p-6 rounded-2xl bg-card border border-secondary-200 dark:border-secondary-800"
+>
+  <div class="rounded-lg p-4">
+    <div class="flex justify-between items-center mb-4">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">Transaction History</h2>
+        <p class="dark:text-secondary-400 text-secondary-600 text-sm">
+          Complete transaction log
+        </p>
+      </div>
+      <p-button
+        label="Revert Transaction"
+        icon="pi pi-undo"
+        (onClick)="openRevertDialog()"
+        styleClass="p-button-danger p-button-outlined"
+      ></p-button>
+    </div>
+
+    <app-table
+      [columns]="transactionColumns"
+      [getDataFunc]="getTransactions"
+      [paginationPageSize]="10"
+      [componentInstance]="this"
+    >
+    </app-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Revert Transaction"
+  [(visible)]="revertDialogVisible"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <form
+    [formGroup]="revertForm"
+    (ngSubmit)="onRevert()"
+    class="flex flex-col gap-4 mt-2"
+  >
+    <!-- Step 1: Verify Transaction -->
+    <div class="flex gap-2 items-end">
+      <div class="flex-grow">
+        <app-input-group
+          id="transactionNumber"
+          label="Transaction Number"
+          [formObj]="getControl('transactionNumber')"
+          [errorMessages]="errorMessages"
+          [isRequired]="true"
+        >
+          <input
+            pInputText
+            id="transactionNumber"
+            formControlName="transactionNumber"
+            placeholder="Enter Transaction ID"
+            class="w-full"
+          />
+        </app-input-group>
+      </div>
+      <p-button
+        label="Verify"
+        icon="pi pi-check"
+        (onClick)="verifyTransaction()"
+        [loading]="isVerifying"
+        [disabled]="!revertForm.get('transactionNumber')?.valid"
+        styleClass="mb-[2px]"
+      ></p-button>
+    </div>
+
+    <!-- Step 2: Transaction Details & Reason -->
+    <div
+      *ngIf="verifiedTransaction"
+      class="bg-secondary-50 dark:bg-secondary-900 p-4 rounded-lg border border-secondary-200 dark:border-secondary-700"
+    >
+      <h3 class="font-semibold mb-2 text-primary">Transaction Details</h3>
+      <div class="grid grid-cols-2 gap-2 text-sm">
+        <div class="text-secondary-500">Amount:</div>
+        <div class="font-medium">
+          {{ verifiedTransaction.amount | currency : "USD" }}
+        </div>
+
+        <div class="text-secondary-500">Type:</div>
+        <div class="font-medium">{{ verifiedTransaction.transactionType }}</div>
+
+        <div class="text-secondary-500">Date:</div>
+        <div class="font-medium">
+          {{ verifiedTransaction.transactionDate | date : "medium" }}
+        </div>
+
+        <div class="text-secondary-500">Status:</div>
+        <div class="font-medium">
+          {{ verifiedTransaction.transactionStatus }}
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="verifiedTransaction">
+      <app-input-group
+        id="reason"
+        label="Reason for Revert"
+        [formObj]="getControl('reason')"
+        [errorMessages]="errorMessages"
+        [isRequired]="true"
+      >
+        <textarea
+          pInputTextarea
+          id="reason"
+          formControlName="reason"
+          rows="3"
+          placeholder="Enter reason for reverting this transaction"
+          class="w-full"
+        ></textarea>
+      </app-input-group>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        styleClass="p-button-text"
+        (onClick)="revertDialogVisible = false"
+      ></p-button>
+      <p-button
+        label="Revert"
+        icon="pi pi-undo"
+        type="submit"
+        severity="danger"
+        [disabled]="revertForm.invalid || !verifiedTransaction"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>

@@ -1,0 +1,294 @@
+<div class="min-h-screen p-6">
+  <!-- Header -->
+  <div class="mb-8 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <p-button
+        icon="pi pi-arrow-left"
+        [rounded]="true"
+        [text]="true"
+        severity="secondary"
+        (onClick)="goBack()"
+        styleClass="hover:bg-gray-100 transition-colors duration-200"
+      >
+      </p-button>
+      <div>
+        <h1 class="text-3xl font-bold text-foreground tracking-tight">
+          Loan Details
+        </h1>
+        <p class="text-gray-500 mt-1">View and manage loan information</p>
+      </div>
+    </div>
+    <div *ngIf="!loading && loanDetails">
+      <p-tag
+        [value]="loanDetails.loanStatus"
+        [severity]="getSeverity(loanDetails.loanStatus)"
+        styleClass="text-sm px-3 py-1 uppercase tracking-wider font-semibold"
+      >
+      </p-tag>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <p-skeleton height="150px" styleClass="rounded-xl"></p-skeleton>
+    <p-skeleton height="150px" styleClass="rounded-xl"></p-skeleton>
+    <p-skeleton height="150px" styleClass="rounded-xl"></p-skeleton>
+  </div>
+
+  <div *ngIf="!loading && loanDetails" class="space-y-8 animate-fade-in">
+    <!-- Key Metrics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Principal -->
+      <div
+        class="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow duration-300"
+      >
+        <div class="flex items-center gap-3 mb-2">
+          <div class="p-2 bg-blue-50 rounded-lg text-blue-600">
+            <i class="pi pi-money-bill text-xl"></i>
+          </div>
+          <span
+            class="text-sm font-medium text-gray-500 uppercase tracking-wide"
+            >Principal Amount</span
+          >
+        </div>
+        <div class="text-2xl font-bold text-foreground">
+          {{
+            loanDetails.principalAmount | currency : "INR" : "symbol" : "1.0-0"
+          }}
+        </div>
+      </div>
+
+      <!-- EMI -->
+      <div
+        class="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow duration-300"
+      >
+        <div class="flex items-center gap-3 mb-2">
+          <div class="p-2 bg-purple-50 rounded-lg text-purple-600">
+            <i class="pi pi-calendar text-xl"></i>
+          </div>
+          <span
+            class="text-sm font-medium text-gray-500 uppercase tracking-wide"
+            >Monthly EMI</span
+          >
+        </div>
+        <div class="text-2xl font-bold text-foreground">
+          {{ loanDetails.emiAmount | currency : "INR" }}
+        </div>
+      </div>
+
+      <!-- Interest Rate -->
+      <div
+        class="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow duration-300"
+      >
+        <div class="flex items-center gap-3 mb-2">
+          <div class="p-2 bg-orange-50 rounded-lg text-orange-600">
+            <i class="pi pi-percentage text-xl"></i>
+          </div>
+          <span
+            class="text-sm font-medium text-gray-500 uppercase tracking-wide"
+            >Interest Rate</span
+          >
+        </div>
+        <div class="text-2xl font-bold text-foreground">
+          {{ loanDetails.interestRate }}%
+        </div>
+      </div>
+
+      <!-- Tenure -->
+      <div
+        class="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow duration-300"
+      >
+        <div class="flex items-center gap-3 mb-2">
+          <div class="p-2 bg-teal-50 rounded-lg text-teal-600">
+            <i class="pi pi-clock text-xl"></i>
+          </div>
+          <span
+            class="text-sm font-medium text-gray-500 uppercase tracking-wide"
+            >Total Tenure</span
+          >
+        </div>
+        <div class="text-2xl font-bold text-foreground">
+          {{ loanDetails.totalMonths }}
+          <span class="text-base font-normal text-gray-500">Months</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed Info Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Left Column: Loan & Account Info -->
+      <div class="lg:col-span-1 space-y-6">
+        <div
+          class="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700"
+        >
+          <h3
+            class="text-lg font-bold text-foreground mb-6 flex items-center gap-2"
+          >
+            <i class="pi pi-id-card text-blue-500"></i> Loan Information
+          </h3>
+          <div class="space-y-4">
+            <div
+              class="flex justify-between items-center py-3 border-b border-gray-50"
+            >
+              <span class="text-gray-500 dark:text-gray-400">Loan Number</span>
+              <span class="font-medium text-foreground dark:text-gray-100">{{
+                loanDetails.loanNumber
+              }}</span>
+            </div>
+            <div
+              class="flex justify-between items-center py-3 border-b border-gray-50"
+            >
+              <span class="text-gray-500 dark:text-gray-400">Loan Type</span>
+              <span class="font-medium text-foreground dark:text-gray-100">{{
+                loanDetails.loanType
+              }}</span>
+            </div>
+            <div
+              class="flex justify-between items-center py-3 border-b border-gray-50"
+            >
+              <span class="text-gray-500 dark:text-gray-400"
+                >Application Date</span
+              >
+              <span class="font-medium text-foreground dark:text-gray-100">{{
+                loanDetails.applicationDate | date : "mediumDate"
+              }}</span>
+            </div>
+            <div
+              class="flex justify-between items-center py-3 border-b border-gray-50"
+            >
+              <span class="text-gray-500 dark:text-gray-400"
+                >Approved Date</span
+              >
+              <span class="font-medium text-foreground dark:text-gray-100">{{
+                loanDetails.approvedDate
+                  ? (loanDetails.approvedDate | date : "mediumDate")
+                  : "N/A"
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700"
+        >
+          <h3
+            class="text-lg font-bold text-foreground mb-6 flex items-center gap-2"
+          >
+            <i class="pi pi-user text-blue-500"></i> Account Details
+          </h3>
+          <div class="space-y-4">
+            <div
+              class="flex justify-between items-center py-3 border-b border-gray-50"
+            >
+              <span class="text-gray-500 dark:text-gray-400"
+                >Account Number</span
+              >
+              <span class="font-medium text-foreground dark:text-gray-100">{{
+                loanDetails.accountNumber
+              }}</span>
+            </div>
+            <div
+              class="flex justify-between items-center py-3 border-b border-gray-50"
+            >
+              <span class="text-gray-500 dark:text-gray-400">User ID</span>
+              <span
+                class="font-medium text-foreground dark:text-gray-100 truncate max-w-[150px]"
+                [title]="loanDetails.userId"
+                >{{ loanDetails.userId }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: EMI Schedule -->
+      <div class="lg:col-span-2">
+        <div
+          class="bg-card rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden"
+        >
+          <div
+            class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center"
+          >
+            <h3
+              class="text-lg font-bold text-foreground flex items-center gap-2"
+            >
+              <i class="pi pi-list text-blue-500"></i> Amortization Schedule
+            </h3>
+            <span class="text-sm text-gray-500 dark:text-gray-400"
+              >{{ loanDetails.emis.length }} Installments</span
+            >
+          </div>
+
+          <p-table
+            [value]="loanDetails.emis"
+            [scrollable]="true"
+            scrollHeight="600px"
+            styleClass="p-datatable-sm p-datatable-striped"
+            [rowHover]="true"
+          >
+            <ng-template pTemplate="header">
+              <tr
+                class="text-xs uppercase tracking-wider text-gray-500 bg-gray-600 dark:bg-gray-800"
+              >
+                <th class="p-4 font-semibold">#</th>
+                <th class="p-4 font-semibold">Date</th>
+                <th class="p-4 font-semibold text-right">EMI</th>
+                <th class="p-4 font-semibold text-right">Principal</th>
+                <th class="p-4 font-semibold text-right">Interest</th>
+                <th class="p-4 font-semibold text-center">Status</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-emi>
+              <tr
+                class="text-sm text-gray-700 hover:bg-gray-50 transition-colors dark:text-gray-100 dark:hover:bg-gray-800"
+              >
+                <td class="p-4 font-medium text-gray-500 dark:text-gray-100">
+                  {{ emi.emiNumber }}
+                </td>
+                <td class="p-4 dark:text-gray-100">
+                  {{ emi.emiDate | date : "mediumDate" }}
+                </td>
+                <td class="p-4 text-right font-medium">
+                  {{ emi.emiAmount | currency : "INR" }}
+                </td>
+                <td class="p-4 text-right text-gray-600 dark:text-gray-100">
+                  {{ emi.principalAmount | currency : "INR" }}
+                </td>
+                <td class="p-4 text-right text-gray-600 dark:text-gray-100">
+                  {{
+                    emi.interestAmount
+                      ? (emi.interestAmount | currency : "INR")
+                      : "-"
+                  }}
+                </td>
+                <td class="p-4 text-center dark:text-gray-100">
+                  <span
+                    class="px-2 py-1 rounded-full text-xs font-semibold"
+                    [ngClass]="{
+                      'bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100':
+                        emi.paid,
+                      'bg-red-50 text-red-600 dark:bg-red-600 dark:text-red-100':
+                        !emi.paid
+                    }"
+                  >
+                    {{ emi.paid ? "Paid" : "Unpaid" }}
+                  </span>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td
+                  colspan="6"
+                  class="text-center p-8 text-gray-500 dark:text-gray-100"
+                >
+                  No EMI schedule available.
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

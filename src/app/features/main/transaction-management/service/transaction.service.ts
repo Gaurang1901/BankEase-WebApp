@@ -16,22 +16,10 @@ import { CommonResponseModel } from '../../../../core/types/helper.model';
 export class TransactionService {
   private http = inject(ApiService);
 
-  /**
-   * Fetches the summary of all transactions for a given account.
-   * @param accountId The ID of the account.
-   */
   getTransactionSummary(
     accountId: string
   ): Observable<CommonResponseModel<TransactionSummary>> {
-    // Replace with a real API call:
     return this.http.get(`/api/users/transaction/summary/${accountId}`);
-
-    // const mockSummary: TransactionSummary = {
-    //   totalDeposits: 15000,
-    //   totalWithdrawals: 6850,
-    //   totalTransfers: 3000,
-    // };
-    // return of(mockSummary).pipe(delay(500));
   }
   executeTransaction(
     userId: string,

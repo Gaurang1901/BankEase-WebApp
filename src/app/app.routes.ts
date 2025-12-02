@@ -77,11 +77,66 @@ export const routes: Routes = [
           },
         ],
       },
-      // {
-      //   path: 'admin',
-      //   canActivate: [RoleGuard],
-      //   children: [{}],
-      // },
+      {
+        path: 'admin',
+        // canActivate: [RoleGuard],
+        children: [
+          {
+            path: 'users',
+            loadComponent: () =>
+              import('./features/admin/users/users.component').then(
+                (m) => m.UsersComponent
+              ),
+          },
+          {
+            path: 'accounts',
+            loadComponent: () =>
+              import(
+                './features/admin/accounts/account-list/account-list.component'
+              ).then((m) => m.AccountListComponent),
+          },
+          {
+            path: 'transactions',
+            loadComponent: () =>
+              import(
+                './features/admin/transactions/transaction-list/transaction-list.component'
+              ).then((m) => m.TransactionListComponent),
+          },
+
+          {
+            path: 'loans',
+            loadComponent: () =>
+              import(
+                './features/admin/loan-system/pages/loan-list/loan-list.component'
+              ).then((m) => m.LoanListComponent),
+          },
+          {
+            path: 'loan-pending-list',
+            loadComponent: () =>
+              import(
+                './features/admin/loan-system/pages/pending-approval-loans/pending-approval-loans.component'
+              ).then((m) => m.PendingApprovalLoansComponent),
+          },
+          {
+            path: 'loans/details/:id',
+            loadComponent: () =>
+              import(
+                './features/admin/loan-system/pages/loan-details/loan-details.component'
+              ).then((m) => m.LoanDetailsComponent),
+          },
+        ],
+      },
+      {
+        path: 'work-in-progress',
+        loadComponent: () =>
+          import(
+            './components/work-in-progress/work-in-progress.component'
+          ).then((m) => m.WorkInProgressComponent),
+      },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: 'work-in-progress',
   },
 ];
