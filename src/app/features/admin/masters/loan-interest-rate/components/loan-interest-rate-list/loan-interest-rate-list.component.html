@@ -1,0 +1,22 @@
+<div
+  class="flex flex-col gap-2 p-4 bg-card border-2 border-gray-200 dark:border-gray-800 rounded-xl"
+>
+  <div class="flex items-center justify-between">
+    <h2 class="text-lg font-semibold">Loan Interest Rate List</h2>
+    <p-button label="Add Loan Interest Rate" (click)="onAddState()" />
+  </div>
+
+  <app-table
+    [columns]="columns"
+    [getDataFunc]="getDataFunc"
+    [paginationPageSize]="10"
+    [componentInstance]="this"
+  ></app-table>
+</div>
+
+<ng-template #actionTemplate let-data>
+  <div class="flex gap-2">
+    <p-button icon="pi pi-pencil" (click)="navigateToUpdate(data)" />
+    <p-button icon="pi pi-trash" (click)="deleteState(data)" />
+  </div>
+</ng-template>

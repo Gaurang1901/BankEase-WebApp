@@ -128,7 +128,7 @@ export class TableComponent {
     sortBy: this.getSortQuery(this.sortField, this.sortOrder),
       this.getDataFunc(requestParams, this.componentInstance).subscribe({
         next: (res) => {
-          this.data = res.data.content ?? [];
+          this.data = res.data.content ?? res.data ?? [];
           this.totalItems = res.data.totalElements ?? 0;
           this.currentPageRows = this.data;
           this.loading = false;

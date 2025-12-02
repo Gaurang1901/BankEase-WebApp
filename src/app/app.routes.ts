@@ -82,6 +82,34 @@ export const routes: Routes = [
         // canActivate: [RoleGuard],
         children: [
           {
+            path: 'loan-interest-rates',
+            loadComponent: () =>
+              import(
+                './features/admin/masters/loan-interest-rate/components/loan-interest-rate-list/loan-interest-rate-list.component'
+              ).then((m) => m.LoanInterestRateListComponent),
+          },
+          {
+            path: 'loan-interest-rates-add',
+            loadComponent: () =>
+              import(
+                './features/admin/masters/loan-interest-rate/components/loan-interest-rate-create/loan-interest-rate-create.component'
+              ).then((m) => m.LoanInterestRateCreateComponent),
+          },
+          {
+            path: 'state-list',
+            loadComponent: () =>
+              import(
+                './features/admin/masters/state/components/state-list/state-list.component'
+              ).then((m) => m.StateListComponent),
+          },
+          {
+            path: 'state-add',
+            loadComponent: () =>
+              import(
+                './features/admin/masters/state/components/state-create/state-create.component'
+              ).then((m) => m.StateCreateComponent),
+          },
+          {
             path: 'users',
             loadComponent: () =>
               import('./features/admin/users/users.component').then(
@@ -116,6 +144,27 @@ export const routes: Routes = [
               import(
                 './features/admin/loan-system/pages/pending-approval-loans/pending-approval-loans.component'
               ).then((m) => m.PendingApprovalLoansComponent),
+          },
+          {
+            path: 'loans/details/:id',
+            loadComponent: () =>
+              import(
+                './features/admin/loan-system/pages/loan-details/loan-details.component'
+              ).then((m) => m.LoanDetailsComponent),
+          },
+          {
+            path: 'cards',
+            loadComponent: () =>
+              import(
+                './features/admin/card-system/pages/card-list/card-list.component'
+              ).then((m) => m.CardListComponent),
+          },
+          {
+            path: 'cards-pending-list',
+            loadComponent: () =>
+              import(
+                './features/admin/card-system/pages/pending-approval-cards/card-approval.component'
+              ).then((m) => m.PendingApprovalCardComponent),
           },
           {
             path: 'loans/details/:id',

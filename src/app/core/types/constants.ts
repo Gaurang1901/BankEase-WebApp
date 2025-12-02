@@ -83,3 +83,26 @@ export const REVENUE_PERIOD_TYPE = {
     value: 'MONTHLY',
   },
 };
+
+export const LOAN_TYPES = {
+  HOME: {
+    label: 'Home',
+    value: 'HOME',
+  },
+  PERSONAL: {
+    label: 'Personal',
+    value: 'PERSONAL',
+  },
+  VEHICLE: {
+    label: 'Vehicle',
+    value: 'VEHICLE',
+  },
+  STUDENT: {
+    label: 'Student',
+    value: 'STUDENT',
+  },
+  BUSINESS: {
+    label: 'Business',
+    value: 'BUSINESS',
+  },
+};

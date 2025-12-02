@@ -1,0 +1,47 @@
+<div
+  class="flex flex-col p-4 gap-6 rounded-xl border-2 border-secondary-400 dark:border-secondary-700 bg-card"
+>
+  <div>
+    <span class="text-lg font-bold">State Form</span>
+  </div>
+  <form class="grid grid-cols-2 gap-4" [formGroup]="stateForm">
+    <app-input-group
+      id="name"
+      label="Name"
+      [formObj]="formHelper.getFormControl(stateForm, 'name')"
+      [errorMessages]="{
+        required: 'Name is required',
+        minlength: 'Name must be at least 3 characters long',
+        maxlength: 'Name must be at most 50 characters long',
+      }"
+    >
+      <input
+        pInputText
+        [formControl]="formHelper.getFormControl(stateForm, 'name')"
+        [maxLength]="50"
+        placeholder="Enter state name"
+      />
+    </app-input-group>
+    <app-input-group
+      id="code"
+      label="Code"
+      [formObj]="formHelper.getFormControl(stateForm, 'code')"
+      [errorMessages]="{
+        required: 'Code is required',
+        minlength: 'Code must be at least 2 characters long',
+        maxlength: 'Code must be at most 10 characters long',
+      }"
+    >
+      <input
+        pInputText
+        [formControl]="formHelper.getFormControl(stateForm, 'code')"
+        [maxLength]="10"
+        placeholder="Enter state code"
+      />
+    </app-input-group>
+  </form>
+
+  <div class="flex md:flex-row flex-col justify-end gap-2">
+    <p-button label="Submit" (click)="onSubmit()" />
+  </div>
+</div>

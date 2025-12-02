@@ -64,7 +64,7 @@ export const sideBarItems: MasterSidebarItem[] = [
       {
         icon: 'pi pi-check-circle',
         label: 'Pending Approvals',
-        routeLink: '/admin/cards-pending-list ',
+        routeLink: '/admin/cards-pending-list',
       },
       {
         icon: 'pi pi-credit-card',
@@ -84,12 +84,12 @@ export const sideBarItems: MasterSidebarItem[] = [
       {
         icon: 'pi pi-briefcase',
         label: 'Loan Interest Rates',
-        routeLink: 'loan-interest-rates',
+        routeLink: '/admin/loan-interest-rates',
       },
       {
-        icon: 'pi pi-bank',
+        icon: 'pi pi-th-large',
         label: 'States',
-        routeLink: 'state-list',
+        routeLink: '/admin/state-list',
       },
     ],
   },

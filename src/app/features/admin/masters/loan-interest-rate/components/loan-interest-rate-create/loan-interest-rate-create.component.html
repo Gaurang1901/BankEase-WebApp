@@ -1,0 +1,47 @@
+<div
+  class="flex flex-col p-4 gap-6 rounded-xl border-2 border-secondary-400 dark:border-secondary-700 bg-card"
+>
+  <div>
+    <span class="text-lg font-bold">Loan Interest Rate Form</span>
+  </div>
+  <form class="grid grid-cols-2 gap-4" [formGroup]="stateForm">
+    <app-input-group
+      id="loanTypes"
+      class="col-span-1"
+      label="Loan Types"
+      [formObj]="formHelper.getFormControl(stateForm, 'loanTypes')"
+      [errorMessages]="{
+        required: 'Loan Types is required',
+      }"
+    >
+      <p-select
+        [options]="loanTypes"
+        optionLabel="label"
+        optionValue="value"
+        class="rounded-xl"
+        [formControl]="formHelper.getFormControl(stateForm, 'loanTypes')"
+      />
+    </app-input-group>
+    <app-input-group
+      id="interestRate"
+      class="col-span-1"
+      label="Interest Rate"
+      [formObj]="formHelper.getFormControl(stateForm, 'interestRate')"
+      [errorMessages]="{
+        required: 'Interest Rate is required',
+        min: 'Interest Rate must be at least 0',
+        max: 'Interest Rate must be at most 100',
+      }"
+    >
+      <p-inputnumber
+        [formControl]="formHelper.getFormControl(stateForm, 'interestRate')"
+        [useGrouping]="false"
+        [maxFractionDigits]="2"
+      />
+    </app-input-group>
+  </form>
+
+  <div class="flex md:flex-row flex-col justify-end gap-2">
+    <p-button label="Submit" (click)="onSubmit()" />
+  </div>
+</div>
