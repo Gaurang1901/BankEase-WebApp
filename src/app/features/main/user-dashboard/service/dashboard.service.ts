@@ -64,7 +64,11 @@ export class DashboardService {
     params = params.append('toDate', toDate);
     (Object.keys(paging) as Array<keyof Paging>).forEach((key) => {
       if (paging[key] !== undefined) {
-        params = params.append(key, String(paging[key]));
+        if (key === 'size') {
+          params = params.append(key, 10);
+        } else {
+          params = params.append(key, String(paging[key]));
+        }
       }
     });
     return this.apiService.get(`/api/user/dashboard/recent-user-transactions`, {
