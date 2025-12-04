@@ -51,7 +51,7 @@ export class PendingApprovalCardComponent {
 
   handleAction(row: CardModel, action: string) {
     if (action === 'APPROVE') {
-      this.updateStatus(row.id, 'APPROVED');
+      this.updateStatus(row.id, 'ACTIVE');
     } else if (action === 'REJECT') {
       this.updateStatus(row.id, 'CANCELLED');
     } else if (action === 'VIEW') {

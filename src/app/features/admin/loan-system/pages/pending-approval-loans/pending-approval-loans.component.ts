@@ -7,6 +7,7 @@ import { LoanModel } from '../../models/loan.model';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { CustomTableService } from '../../../../../core/services/table.service';
 
 @Component({
   selector: 'app-pending-approval-loans',
@@ -23,6 +24,7 @@ export class PendingApprovalLoansComponent {
   datePipe = inject(DatePipe);
   currencyPipe = inject(CurrencyPipe);
   router = inject(Router);
+  tableService = inject(CustomTableService);
 
   @ViewChild('actionTemplate', { static: true })
   actionTemplate!: TemplateRef<any>;
@@ -89,7 +91,8 @@ export class PendingApprovalLoansComponent {
         // Trigger table refresh if possible, or just let user reload.
         // Ideally TableComponent should have a refresh mechanism exposed.
         // For now, we rely on the user or implement a refresh subject.
-        window.location.reload(); // Simple refresh for now
+        this.tableService.setrefreshTable(true);
+        this.tableService.setrefreshTable(false);
       },
       error: (err) => {
         this.messageService.add({

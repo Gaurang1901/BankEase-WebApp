@@ -95,7 +95,7 @@ export class UsersComponent implements OnInit {
   getStates() {
     this.api.get('/api/state').subscribe({
       next: (response: any) => {
-        this.states = response.content || response.data || [];
+        this.states = response.content || response.data.content || [];
       },
       error: () => {
         this.messageService.add({
@@ -168,7 +168,7 @@ export class UsersComponent implements OnInit {
     {
       field: 'accountNumbers',
       header: 'Account No',
-      cellRenderer: (data) => data.accountNumbers?.join(', ') || 'N/A',
+      cellRenderer: (data) => data?.accountNumbers?.join(', ') || 'N/A',
     },
     { field: 'phoneNo', header: 'Phone' },
     {

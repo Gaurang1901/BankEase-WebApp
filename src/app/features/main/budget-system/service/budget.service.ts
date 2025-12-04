@@ -44,10 +44,12 @@ export class BudgetService {
   // Goal APIs
   createGoal(
     accountId: string,
-    goal: CreateGoalRequest
+    goal: CreateGoalRequest,
+    userId: string
   ): Observable<GoalResponse> {
+    let headers = new HttpHeaders().set('X-User-ID', userId);
     return this.apiService
-      .post<any>(`/api/user/accounts/${accountId}/goals`, goal)
+      .post<any>(`/api/user/accounts/${accountId}/goals`, goal, { headers })
       .pipe(map((res) => res.data));
   }
 

@@ -9,16 +9,17 @@
   <ng-template pTemplate="content">
     <form [formGroup]="fundsForm" class="flex flex-col gap-4 mt-4">
       <div class="field">
-        <label for="amount" class="block text-sm font-medium text-gray-700 mb-1"
+        <label
+          for="amount"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
           >Amount to Add</label
         >
         <p-inputNumber
           id="amount"
           formControlName="amount"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
           placeholder="0.00"
+          class="w-full"
+          styleClass="w-full"
           [min]="0.01"
         ></p-inputNumber>
         <small *ngIf="isFieldInvalid('amount')" class="text-red-500"
@@ -42,7 +43,7 @@
       pRipple
       label="Add Funds"
       icon="pi pi-check"
-      class="p-button-text"
+      class="p-button-primary"
       (click)="onSubmit()"
       [disabled]="fundsForm.invalid"
     ></button>

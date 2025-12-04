@@ -77,12 +77,14 @@ export class TransactionsPageComponent implements OnInit {
       .subscribe({
         next: () => {
           this.messageService.add({
+            key: 'custom-toast',
             severity: 'success',
             summary: 'Success',
             detail: `${this.currentTransactionType} completed successfully!`,
           });
-          // Refresh summary data after a successful transaction
-          document.location.reload();
+          setTimeout(() => {
+            document.location.reload();
+          }, 500);
           this.summary$ = this.transactionService.getTransactionSummary(
             this.user?.accountId!
           );
@@ -92,6 +94,7 @@ export class TransactionsPageComponent implements OnInit {
         },
         error: (err) => {
           this.messageService.add({
+            key: 'custom-toast',
             severity: 'error',
             summary: 'Error',
             detail: `Failed to process ${this.currentTransactionType}. Please try again.`,

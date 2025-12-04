@@ -144,13 +144,15 @@ export class BudgetSystemComponent implements OnInit {
           error: () => this.showError('Failed to update goal'),
         });
     } else {
-      this.budgetService.createGoal(this.accountId, goalRequest).subscribe({
-        next: () => {
-          this.showSuccess('Goal created successfully');
-          this.loadData();
-        },
-        error: () => this.showError('Failed to create goal'),
-      });
+      this.budgetService
+        .createGoal(this.accountId, goalRequest, this.userId!)
+        .subscribe({
+          next: () => {
+            this.showSuccess('Goal created successfully');
+            this.loadData();
+          },
+          error: () => this.showError('Failed to create goal'),
+        });
     }
   }
 
@@ -181,6 +183,7 @@ export class BudgetSystemComponent implements OnInit {
 
   private showSuccess(message: string) {
     this.messageService.add({
+      key: 'custom-toast',
       severity: 'success',
       summary: 'Success',
       detail: message,
@@ -189,6 +192,7 @@ export class BudgetSystemComponent implements OnInit {
 
   private showError(message: string) {
     this.messageService.add({
+      key: 'custom-toast',
       severity: 'error',
       summary: 'Error',
       detail: message,
