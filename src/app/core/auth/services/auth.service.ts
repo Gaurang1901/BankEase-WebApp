@@ -38,6 +38,12 @@ export class AuthService {
     this.localStorageService.removeItem(TOKEN_KEY);
   }
 
+  sayHello() {
+    this.http.get(`${this.hostUrl}/api/hello`).subscribe((res) => {
+      console.log(res);
+    });
+  }
+
   login(credentials: LoginCredentials): Observable<{ data: LoginResponse }> {
     // Mock API endpoints based on login type
     switch (credentials.type) {

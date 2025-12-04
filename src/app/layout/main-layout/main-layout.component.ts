@@ -1,18 +1,27 @@
-import { Component, computed, HostListener, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  HostListener,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../core/auth/services/auth.service';
 
 @Component({
   selector: 'app-main-layout',
   imports: [RouterOutlet, HeaderComponent, SidebarComponent, CommonModule],
   templateUrl: './main-layout.component.html',
-  styleUrl: './main-layout.component.scss'
+  styleUrl: './main-layout.component.scss',
 })
-export class MainLayoutComponent implements OnInit{
+export class MainLayoutComponent implements OnInit {
   isLeftSidebarCollapsed = signal<boolean>(true);
   screenWidth = signal<number>(window.innerWidth);
+  authService = inject(AuthService);
 
   @HostListener('window:resize')
   onResize() {
@@ -23,6 +32,7 @@ export class MainLayoutComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.authService.sayHello();
     // this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
   }
 
@@ -32,8 +42,8 @@ export class MainLayoutComponent implements OnInit{
 
   screenClass = computed(() => {
     const isLeftSidebarCollapsed = this.isLeftSidebarCollapsed();
-    if(isLeftSidebarCollapsed){
-      return ''
+    if (isLeftSidebarCollapsed) {
+      return '';
     }
     return this.screenWidth() > 768 ? 'body-trimmed' : 'body-md-screen';
   });
