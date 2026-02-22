@@ -27,6 +27,7 @@ import { Enum } from '../../../../../core/types/helper.model';
 import { BUDGET_CATEGORY } from '../../../../../core/types/constants';
 import { AuthService } from '../../../../../core/auth/services/auth.service';
 import { User } from '../../../../../core/auth/store/auth.state';
+import { IdempotencyService } from '../../../../../core/auth/services/idempotency.service';
 
 export interface TransactionSubmitEvent {
   payload: TransactionPayload;
@@ -61,7 +62,11 @@ export class TransactionDialogComponent implements OnChanges {
   budgetCategories: Enum[] = Object.values(BUDGET_CATEGORY);
   user: User | null = null;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private idempotencyService: IdempotencyService,
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     // Re-initialize the form and generate a new UUID whenever the dialog is made visible
@@ -72,8 +77,10 @@ export class TransactionDialogComponent implements OnChanges {
 
   private initializeComponent(): void {
     this.isSubmitting = false;
-    // Generate a unique Idempotency Key for this specific transaction attempt
-    this.idempotencyKey = crypto.randomUUID();
+    // Fetch a secure Idempotency Key from the backend for this specific transaction attempt
+    this.idempotencyService.generateKey().subscribe((key) => {
+      this.idempotencyKey = key;
+    });
     this.buildForm();
     this.authService.getUserProfile().subscribe((user) => {
       if (user === null) return;

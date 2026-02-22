@@ -38,6 +38,7 @@ export type DisplaySidebarItem = MasterSidebarItem & {
 })
 export class SidebarComponent {
   isLeftSidebarCollapsed = input.required<boolean>();
+  isMobile = input<boolean>(false);
   changeIsLeftSidebarCollapsed = output<boolean>();
   allItems: MasterSidebarItem[] = [];
 
@@ -47,7 +48,6 @@ export class SidebarComponent {
   constructor() {
     this.allItems = sideBarItems;
   }
-
 
   items = computed(() => {
     const permittedItems: DisplaySidebarItem[] = [];
@@ -59,7 +59,7 @@ export class SidebarComponent {
           !item.permission ||
           this.authStore.hasPermission()(
             item.permission.resource,
-            item.permission.action
+            item.permission.action,
           );
 
         if (!hasPermission) continue;
@@ -93,8 +93,11 @@ export class SidebarComponent {
           : updated.add(item.label);
         return updated;
       });
-    } else if ((item.routeLink || item.routeLink === '') && !this.isLeftSidebarCollapsed()) {
-      this.closeSidenav();
+    } else if (item.routeLink !== undefined) {
+      // On mobile, always close after navigation
+      if (this.isMobile()) {
+        this.closeSidenav();
+      }
     }
   }
 

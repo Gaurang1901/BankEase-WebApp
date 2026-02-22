@@ -11,6 +11,7 @@ import { AuthService } from '../../../../../core/auth/services/auth.service';
 import { User } from '../../../../../core/auth/store/auth.state';
 import { RequestCardDialogComponent } from '../request-card-dialog/request-card-dialog.component';
 import { CardTransactionsComponentComponent } from '../card-transactions-component/card-transactions-component.component';
+import { IdempotencyService } from '../../../../../core/auth/services/idempotency.service';
 
 @Component({
   selector: 'app-card-management',
@@ -38,6 +39,7 @@ export class CardManagementComponent {
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
   private authService = inject(AuthService);
+  private idempotencyService = inject(IdempotencyService);
 
   // State using Signals
   cards = signal<CardModel[]>([]);
@@ -91,7 +93,7 @@ export class CardManagementComponent {
       message: `Are you sure you want to block your ${
         card.type
       } card ending in ${card.cardNumber.slice(
-        -4
+        -4,
       )}? This action allows you to temporarily freeze activity.`,
       icon: 'pi pi-exclamation-triangle',
       acceptIcon: 'pi pi-lock',
@@ -107,18 +109,24 @@ export class CardManagementComponent {
   }
 
   private handleBlockAction(cardId: string) {
-    this.cardService.blockCard(cardId, this.user?.userId!).subscribe(() => {
-      this.messageService.add({
-        key: 'custom-toast',
-        severity: 'success',
-        summary: 'Card Blocked',
-        detail: 'Your card has been successfully blocked.',
-      });
+    this.idempotencyService.generateKey().subscribe((key) => {
+      this.cardService
+        .blockCard(cardId, this.user?.userId!, key)
+        .subscribe(() => {
+          this.messageService.add({
+            key: 'custom-toast',
+            severity: 'success',
+            summary: 'Card Blocked',
+            detail: 'Your card has been successfully blocked.',
+          });
 
-      // Update local state to reflect change
-      this.cards.update((cards) =>
-        cards.map((c) => (c.id === cardId ? { ...c, status: 'BLOCKED' } : c))
-      );
+          // Update local state to reflect change
+          this.cards.update((cards) =>
+            cards.map((c) =>
+              c.id === cardId ? { ...c, status: 'BLOCKED' } : c,
+            ),
+          );
+        });
     });
   }
 
@@ -127,7 +135,7 @@ export class CardManagementComponent {
       severity: 'info',
       summary: 'Navigating',
       detail: `Viewing transactions for card ending in ${card.cardNumber.slice(
-        -4
+        -4,
       )}`,
     });
     this.isRequestCardTransactionDialogVisible = true;

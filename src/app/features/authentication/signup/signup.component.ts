@@ -101,7 +101,7 @@ export class SignupComponent {
     },
     {
       validators: this.passwordMatchValidator,
-    }
+    },
   );
 
   accountForm = this.fb.group({
@@ -222,7 +222,7 @@ export class SignupComponent {
           };
 
           return this.authService.createAccount(accountPayload);
-        })
+        }),
       )
       .subscribe({
         next: (res) => {
@@ -261,7 +261,9 @@ export class SignupComponent {
   getStates() {
     this.authService.getStates().subscribe({
       next: (response: any) => {
-        this.states = response.content;
+        console.log(response);
+
+        this.states = response.data.content;
       },
       error: (error: any) => {
         this.messageService.add({

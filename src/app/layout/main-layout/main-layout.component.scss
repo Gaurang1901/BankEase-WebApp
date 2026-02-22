@@ -1,19 +1,27 @@
+/* Desktop default: leave room for mini sidebar (5rem) */
 .body {
   width: calc(100% - 5rem);
   margin-left: 5rem;
-  z-index: 0;
+  transition: width 0.3s ease, margin-left 0.3s ease;
   position: relative;
-  top: 0;
-  transition: all 0.5s ease;
-  background: #f4f7fa;
+  z-index: 0;
 }
 
+/* Desktop expanded sidebar */
 .body-trimmed {
-  width: calc(100% - 16.5625rem);
-  margin-left: 16.5625rem;
+  width: calc(100% - 16rem);
+  margin-left: 16rem;
 }
 
-.body-md-screen {
-  width: calc(100% - 5rem);
-  margin-left: 5rem;
+/* Mobile: sidebar is an overlay, body takes full width */
+@media (max-width: 767px) {
+  .body {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .body-trimmed {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
 }

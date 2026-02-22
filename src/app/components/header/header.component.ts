@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { AuthStore } from '../../core/auth/store/auth.store';
@@ -27,6 +27,11 @@ export class HeaderComponent {
   readonly themeStore = inject(ThemeStore);
   private readonly router = inject(Router);
   private routerSubscription: Subscription;
+
+  /** Passed from parent layout */
+  isLeftSidebarCollapsed = input<boolean>(true);
+  isMobile = input<boolean>(false);
+  toggleSidebar = output<void>();
 
   private _pageHeaderService = inject(PageHeaderService);
 

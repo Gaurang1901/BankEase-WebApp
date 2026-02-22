@@ -12,6 +12,8 @@ import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/auth/services/auth.service';
 
+const MOBILE_BREAKPOINT = 768;
+
 @Component({
   selector: 'app-main-layout',
   imports: [RouterOutlet, HeaderComponent, SidebarComponent, CommonModule],
@@ -23,28 +25,34 @@ export class MainLayoutComponent implements OnInit {
   screenWidth = signal<number>(window.innerWidth);
   authService = inject(AuthService);
 
+  isMobile = computed(() => this.screenWidth() < MOBILE_BREAKPOINT);
+
   @HostListener('window:resize')
   onResize() {
     this.screenWidth.set(window.innerWidth);
-    if (this.screenWidth() < 768) {
+    // Auto-collapse on mobile when resizing down
+    if (this.isMobile()) {
       this.isLeftSidebarCollapsed.set(true);
     }
   }
 
   ngOnInit(): void {
     this.authService.sayHello();
-    // this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
+    // Ensure sidebar is collapsed on initial mobile load
+    if (this.isMobile()) {
+      this.isLeftSidebarCollapsed.set(true);
+    }
   }
 
   changeIsLeftSidebarCollapsed(isLeftSidebarCollapsed: boolean): void {
     this.isLeftSidebarCollapsed.set(isLeftSidebarCollapsed);
   }
 
+  /** On desktop: push body to the right. On mobile: sidebar overlays, body is always full width. */
   screenClass = computed(() => {
-    const isLeftSidebarCollapsed = this.isLeftSidebarCollapsed();
-    if (isLeftSidebarCollapsed) {
-      return '';
+    if (this.isMobile()) {
+      return ''; // full width always on mobile; sidebar is an overlay
     }
-    return this.screenWidth() > 768 ? 'body-trimmed' : 'body-md-screen';
+    return this.isLeftSidebarCollapsed() ? '' : 'body-trimmed';
   });
 }

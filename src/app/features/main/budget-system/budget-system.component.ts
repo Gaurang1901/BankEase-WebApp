@@ -18,6 +18,7 @@ import { filter, switchMap, take } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { AuthService } from '../../../core/auth/services/auth.service';
+import { IdempotencyService } from '../../../core/auth/services/idempotency.service';
 
 @Component({
   selector: 'app-budget-system',
@@ -40,6 +41,7 @@ export class BudgetSystemComponent implements OnInit {
   private budgetService = inject(BudgetService);
   private authService = inject(AuthService);
   private messageService = inject(MessageService);
+  private idempotencyService = inject(IdempotencyService);
 
   budgets: BudgetResponse[] = [];
   goals: GoalResponse[] = [];
@@ -55,6 +57,7 @@ export class BudgetSystemComponent implements OnInit {
 
   addFundsDialogVisible = false;
   selectedGoalForFunds: GoalResponse | null = null;
+  private idempotencyKey: string = '';
 
   ngOnInit(): void {
     this.authService.getUserProfile().subscribe({
@@ -159,18 +162,20 @@ export class BudgetSystemComponent implements OnInit {
   // Add Funds Actions
   onAddFunds(goal: GoalResponse) {
     this.selectedGoalForFunds = goal;
+    this.idempotencyService.generateKey().subscribe((key) => {
+      this.idempotencyKey = key;
+    });
     this.addFundsDialogVisible = true;
   }
 
   onSaveFunds(request: AddFundsRequest) {
     if (!this.selectedGoalForFunds || !this.userId) return;
-    const idempotencyKey = crypto.randomUUID();
     this.budgetService
       .addFunds(
         this.selectedGoalForFunds.id,
         request,
         this.userId,
-        idempotencyKey
+        this.idempotencyKey,
       )
       .subscribe({
         next: () => {

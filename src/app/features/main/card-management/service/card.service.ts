@@ -39,7 +39,7 @@ export class CardService {
   ];
 
   getCards(
-    accountId: string
+    accountId: string,
   ): Observable<CommonResponseModel<CardResponseModel[]>> {
     // Simulating API latency
     // return of(this.mockCards).pipe(delay(500));
@@ -48,28 +48,36 @@ export class CardService {
 
   blockCard(
     cardId: string,
-    userId: string
+    userId: string,
+    idempotencyKey?: string,
   ): Observable<CommonResponseModel<any>> {
-    const headers = new HttpHeaders().append('X-User-ID', userId);
+    let headers = new HttpHeaders().append('X-User-ID', userId);
+    if (idempotencyKey) {
+      headers = headers.append('Idempotency-Key', idempotencyKey);
+    }
     return this.apiService.post(`/api/cards/${cardId}/block`, {}, { headers });
   }
 
   requestCard(
     cardPayload: CardModel,
     accountId: string,
-    userId: string
+    userId: string,
+    idempotencyKey?: string,
   ): Observable<CommonResponseModel<any>> {
-    const headers = new HttpHeaders().append('X-User-ID', userId);
+    let headers = new HttpHeaders().append('X-User-ID', userId);
+    if (idempotencyKey) {
+      headers = headers.append('Idempotency-Key', idempotencyKey);
+    }
     return this.apiService.post(
       `/api/accounts/${accountId}/cards/request`,
       cardPayload,
-      { headers: headers }
+      { headers: headers },
     );
   }
 
   getCardTransactions(
     data: Paging,
-    cardId: string
+    cardId: string,
   ): Observable<CommonResponseModel<any>> {
     let params = new HttpParams();
     (Object.keys(data) as Array<keyof Paging>).forEach((key) => {

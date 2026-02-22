@@ -1,11 +1,15 @@
 <app-sidebar
   [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+  [isMobile]="isMobile()"
   (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)"
 ></app-sidebar>
 
-
 <main class="body flex flex-col h-screen" [ngClass]="screenClass()">
-  <app-header ></app-header>
+  <app-header
+    [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+    [isMobile]="isMobile()"
+    (toggleSidebar)="changeIsLeftSidebarCollapsed(!isLeftSidebarCollapsed())"
+  ></app-header>
 
   <!-- This wrapper will now fill the remaining space -->
   <div class="flex-1 p-2 overflow-auto bg-background">

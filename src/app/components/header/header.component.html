@@ -1,18 +1,31 @@
 <div
-  class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#121212] text-black dark:text-white"
+  class="flex items-center justify-between px-4 py-3 border-b border-secondary-200 dark:border-secondary-800 bg-card text-foreground"
 >
-  <div class="flex flex-col sm:text-sm md:text-base">
-    <span *ngIf="title$ | async as title" class="font-bold">{{ title }}</span>
+  <!-- Mobile hamburger: only visible on small screens -->
+  @if (isMobile()) {
+    <button
+      class="flex items-center justify-center h-10 w-10 rounded-lg border border-secondary-200 dark:border-secondary-700 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors duration-200 mr-3"
+      (click)="toggleSidebar.emit()"
+      aria-label="Toggle menu"
+    >
+      <i class="pi pi-bars text-foreground"></i>
+    </button>
+  }
+
+  <div class="flex flex-col flex-1 sm:text-sm md:text-base min-w-0">
+    <span *ngIf="title$ | async as title" class="font-bold truncate">{{
+      title
+    }}</span>
     <span
       *ngIf="description$ | async as description"
-      class="text-foreground-secondary text-sm"
+      class="text-foreground-secondary text-sm truncate"
     >
       {{ description }}
     </span>
     <ng-container *ngIf="breadcrumbItems$ | async as breadcrumbItems">
       <p-breadcrumb
         *ngIf="breadcrumbItems.length > 0"
-        styleClass="max-w-full p-0 text-sm text-muted-foreground bg-white dark:bg-[#121212]"
+        styleClass="max-w-full p-0 text-sm bg-card"
         [model]="breadcrumbItems"
         [home]="(home$ | async) || undefined"
       >
@@ -30,30 +43,25 @@
           </ng-container>
           <ng-template #elseBlock>
             <a [routerLink]="item.url" (click)="handleClick(item)">
-              <span [class]="'' + item.styleClass || ''">{{
-                item.label
-              }}</span>
+              <span [class]="'' + item.styleClass || ''">{{ item.label }}</span>
             </a>
           </ng-template>
         </ng-template>
       </p-breadcrumb>
     </ng-container>
   </div>
-  <div class="flex items-center gap-4">
-    <div class="flex items-center gap-4">
-      <p-button
-        [rounded]="true"
-        [text]="true"
-        severity="contrast"
-        (onClick)="themeStore.toggleTheme()"
-      >
-        <i [class]="themeStore.isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"></i>
-      </p-button>
-    </div>
-    <div>
-      <p-button label="Logout" severity="secondary" (onClick)="logout()">
-        <i class="pi pi-sign-out"></i>
-      </p-button>
-    </div>
+
+  <div class="flex items-center gap-3 flex-shrink-0">
+    <p-button
+      [rounded]="true"
+      [text]="true"
+      severity="contrast"
+      (onClick)="themeStore.toggleTheme()"
+    >
+      <i [class]="themeStore.isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"></i>
+    </p-button>
+    <p-button label="Logout" severity="secondary" (onClick)="logout()">
+      <i class="pi pi-sign-out"></i>
+    </p-button>
   </div>
 </div>
