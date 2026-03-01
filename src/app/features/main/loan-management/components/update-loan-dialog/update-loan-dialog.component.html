@@ -25,7 +25,7 @@
         <div>
           <span class="text-muted-foreground">Current Principal:</span>
           <span class="text-foreground font-semibold ml-2"
-            >${{ loan()?.principalAmount?.toLocaleString() || "0" }}</span
+            >₹{{ loan()?.principalAmount?.toLocaleString() || "0" }}</span
           >
         </div>
         <div>
@@ -81,8 +81,8 @@
           id="principalAmount"
           formControlName="principalAmount"
           mode="currency"
-          currency="USD"
-          locale="en-US"
+          currency="INR"
+          locale="en-IN"
           [style]="{ width: '100%' }"
           styleClass="w-full"
         ></p-inputNumber>
@@ -118,13 +118,13 @@
           <div>
             <span class="text-muted-foreground">Current Principal:</span>
             <span class="text-foreground font-semibold ml-2"
-              >${{ loan()?.principalAmount?.toLocaleString() || "0" }}</span
+              >₹{{ loan()?.principalAmount?.toLocaleString() || "0" }}</span
             >
           </div>
           <div>
             <span class="text-muted-foreground">Additional Amount:</span>
             <span class="text-foreground font-semibold ml-2"
-              >${{
+              >₹{{
                 loanUpdateForm
                   .get("principalAmount")
                   ?.value?.toLocaleString() || "0"
@@ -134,7 +134,7 @@
           <div class="col-span-2 pt-2 border-t border-primary/20">
             <span class="text-muted-foreground">Total Principal Amount:</span>
             <span class="text-primary font-bold ml-2 text-base"
-              >${{ getTotalPrincipal().toLocaleString() || "0" }}</span
+              >₹{{ getTotalPrincipal().toLocaleString() || "0" }}</span
             >
           </div>
         </div>
@@ -193,8 +193,8 @@
         id="prePaymentAmount"
         formControlName="prePaymentAmount"
         mode="currency"
-        currency="USD"
-        locale="en-US"
+        currency="INR"
+        locale="en-IN"
         [style]="{ width: '100%' }"
         styleClass="w-full"
       ></p-inputNumber>

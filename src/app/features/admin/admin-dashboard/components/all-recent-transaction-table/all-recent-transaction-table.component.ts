@@ -33,7 +33,10 @@ import { DatePipe } from '@angular/common';
 })
 export class AllRecentTransactionTableComponent {
   columns: Column[] = [];
-  selectedMonth: any = new Date();
+  selectedMonths: Date[] = [
+    new Date(new Date().getFullYear(), new Date().getMonth() - 2, 1),
+    new Date(),
+  ];
   user: User | null = null;
   paging: Paging = {
     page: 0,
@@ -93,12 +96,29 @@ export class AllRecentTransactionTableComponent {
     data: Paging,
     componentInstance: AllRecentTransactionTableComponent
   ): Observable<CommonResponseModel<PagingMaster<UserRecenttTransactions>>> {
-    const monthStr = componentInstance.datePipe.transform(
-      new Date(componentInstance.selectedMonth),
-      'yyyy-MM'
-    );
+    const selectedMonths = componentInstance.selectedMonths;
+    let startMonthStr = '';
+    let endMonthStr = '';
+
+    if (selectedMonths && selectedMonths.length > 0) {
+      startMonthStr =
+        componentInstance.datePipe.transform(selectedMonths[0], 'yyyy-MM') ||
+        '';
+      endMonthStr =
+        componentInstance.datePipe.transform(
+          selectedMonths[1] || selectedMonths[0],
+          'yyyy-MM'
+        ) || '';
+    }
+
     return componentInstance.dashboardService
-      .getRecentTransactionsBymonth(monthStr || '')
-      .pipe(tap((response) => {}));
+      .getRecentTransactionsBymonth(startMonthStr, endMonthStr)
+      .pipe(tap((response) => { }));
+  }
+
+  onMonthChange() {
+    if (this.selectedMonths && this.selectedMonths[1]) {
+      this.tableService.setrefreshTable(true);
+    }
   }
 }

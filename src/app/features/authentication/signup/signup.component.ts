@@ -56,6 +56,7 @@ export class SignupComponent {
 
   currentStep = 0;
   userData: any;
+  date = new Date();
   steps = [{ label: 'Personal Details' }, { label: 'Account Details' }];
 
   accountTypes = [
@@ -127,9 +128,8 @@ export class SignupComponent {
     if (this.currentStep === 0) {
       if (this.userForm.valid) {
         userPayload = {
-          name: `${this.userForm.get('firstName')?.value} ${
-            this.userForm.get('lastName')?.value
-          }`,
+          name: `${this.userForm.get('firstName')?.value} ${this.userForm.get('lastName')?.value
+            }`,
           email: this.userForm.get('email')?.value,
           phoneNo: this.userForm.get('phone')?.value,
           password: this.userForm.get('password')?.value,
@@ -184,9 +184,8 @@ export class SignupComponent {
     } else {
       // Build user payload from form and create user first
       const builtUserPayload = {
-        name: `${this.userForm.get('firstName')?.value} ${
-          this.userForm.get('lastName')?.value
-        }`,
+        name: `${this.userForm.get('firstName')?.value} ${this.userForm.get('lastName')?.value
+          }`,
         email: this.userForm.get('email')?.value,
         phoneNo: this.userForm.get('phone')?.value,
         password: this.userForm.get('password')?.value,

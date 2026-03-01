@@ -143,6 +143,7 @@
                 formControlName="dateOfBirth"
                 [showIcon]="true"
                 class="w-full"
+                [maxDate]="date"
                 styleClass="w-full"
               ></p-calendar>
             </div>
@@ -270,7 +271,7 @@
                 formControlName="initialDeposit"
                 [min]="1000"
                 mode="currency"
-                currency="USD"
+                currency="INR"
                 class="w-full"
               >
               </p-inputNumber>
@@ -294,7 +295,7 @@
                   {{ accountForm.get("accountType")?.value }}
                 </p>
                 <p>
-                  <span class="font-medium">Initial Deposit:</span> ${{
+                  <span class="font-medium">Initial Deposit:</span> ₹{{
                     accountForm.get("initialDeposit")?.value
                   }}
                 </p>

@@ -39,7 +39,15 @@ export class AdminDashboardService {
       .pipe(map((response: any) => response.data));
   }
 
-  getRecentTransactionsBymonth(month: string): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/transactions-by-month/${month}`);
+  getRecentTransactionsBymonth(
+    startMonth: string,
+    endMonth: string
+  ): Observable<any> {
+    const params = new HttpParams()
+      .set('startMonth', startMonth)
+      .set('endMonth', endMonth);
+    return this.http.get(`${this.API_BASE_URL}/transactions-by-month`, {
+      params,
+    });
   }
 }

@@ -5,12 +5,14 @@
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-xl font-semibold text-foreground">Recent Transactions</h2>
       <p-datePicker
-        [(ngModel)]="selectedMonth"
+        [(ngModel)]="selectedMonths"
         view="month"
-        dateFormat="MM"
-        placeholder="Select Month"
+        dateFormat="mm/yy"
+        selectionMode="range"
+        placeholder="Select Month Range"
         size="small"
         [showIcon]="true"
+        (ngModelChange)="onMonthChange()"
       ></p-datePicker>
     </div>
   </ng-template>
